@@ -1,8 +1,6 @@
-let Cube = class {
+let Ground = class {
     constructor(gl, pos) {
-
-        this.rotation = 0;
-
+        
         this.pos = pos;
         // Select the positionBuffer as the one to apply buffer
         // operations to from here out.
@@ -11,44 +9,42 @@ let Cube = class {
         this.positionBuffer = gl.createBuffer();
         gl.bindBuffer(gl.ARRAY_BUFFER, this.positionBuffer);
 
-        const width = 1.0;
-        const height = 1.0;
-        const length = 1.0;
-
+        const width = 20.0;
+        const height = 0.0;
+        const length = 100.0;
         // Now create an array of positions for the cube.
          this.positions = [
            // Front face
-           -width/2, -height/2,  length/2,
-            width/2, -height/2,  length/2,
-            width/2,  height/2,  length/2,
-           -width/2,  height/2,  length/2,
+           -width/2, -height/2,  length,
+            width/2, -height/2,  length,
+            width/2,  height/2,  length,
+           -width/2,  height/2,  length,
            // Back face
-            width/2,  height/2, -length/2,
-           -width/2,  height/2, -length/2,
-           -width/2, -height/2, -length/2,
-            width/2, -height/2, -length/2,
+            width/2,  height/2,     0.0,
+           -width/2,  height/2,     0.0,
+           -width/2, -height/2,     0.0,
+            width/2, -height/2,     0.0,
            // Top face
-           -width/2, -height/2,  length/2,
-            width/2, -height/2,  length/2,
-            width/2, -height/2, -length/2,
-           -width/2, -height/2, -length/2,
+           -width/2, -height/2,  length,
+            width/2, -height/2,  length,
+            width/2, -height/2,     0.0,
+           -width/2, -height/2,     0.0,
            // Bottom face
-           -width/2,  height/2,  length/2,
-            width/2,  height/2,  length/2,
-            width/2,  height/2, -length/2,
-           -width/2,  height/2, -length/2,
+           -width/2,  height/2,  length,
+            width/2,  height/2,  length,
+            width/2,  height/2,     0.0,
+           -width/2,  height/2,     0.0,
            //Left face
-           -width/2,  height/2, -length/2,
-           -width/2,  height/2,  length/2,
-           -width/2, -height/2,  length/2,
-           -width/2, -height/2, -length/2,
+           -width/2,  height/2,     0.0,
+           -width/2,  height/2,  length,
+           -width/2, -height/2,  length,
+           -width/2, -height/2,     0.0,
             //Right face
-            width/2,  height/2, -length/2,
-            width/2,  height/2,  length/2,
-            width/2, -height/2,  length/2,
-            width/2, -height/2, -length/2,
+            width/2,  height/2,     0.0,
+            width/2,  height/2,  length,
+            width/2, -height/2,  length,
+            width/2, -height/2,     0.0,
         ];
-
 
         // Now pass the list of positions into WebGL to build the
         // shape. We do this by creating a Float32Array from the
@@ -60,8 +56,8 @@ let Cube = class {
         this.faceColors = [
             [0.0,  1.0,  1.0,  1.0],    // Front face: cyan
             [1.0,  0.0,  0.0,  1.0],    // Back face: red
-            [0.0,  1.0,  0.0,  1.0],    // Top face: Green
-            [0.0,  0.0,  1.0,  1.0],    // Bottom face: Blue
+            [0.0,  0.0,  1.0,  1.0],    // Top face: Blue
+            [0.0,  1.0,  0.0,  1.0],    // Bottom face: Green
             [1.0,  1.0,  0.0,  1.0],    // Left face: purple
             [1.0,  1.0,  1.0,  1.0],    // Right face: white
         ];
@@ -122,16 +118,6 @@ let Cube = class {
         mat4.translate(modelViewMatrix,     // destination matrix
                        modelViewMatrix,     // matrix to translate
                        this.pos);  // amount to translate
-
-        //Write your code to Rotate the cube here//
-        mat4.rotate(modelViewMatrix,
-                   modelViewMatrix,
-                   cubeRotation,
-                   [1.0, 1.0, 0.0]);
-        mat4.rotate(modelViewMatrix,
-                  modelViewMatrix,
-                  cubeRotation/2,
-                  [0.0, 1.0, 0.0]);
 
       // Tell WebGL how to pull out the positions from the position
       // buffer into the vertexPosition attribute
@@ -197,9 +183,5 @@ let Cube = class {
             const offset = 0;
             gl.drawElements(gl.TRIANGLES, vertexCount, type, offset);
         }
-
-        // Update the rotation for the next draw
-
-        cubeRotation += deltaTime;
     }
 };

@@ -1,7 +1,5 @@
-let Cube = class {
+let Rail = class {
     constructor(gl, pos) {
-
-        this.rotation = 0;
 
         this.pos = pos;
         // Select the positionBuffer as the one to apply buffer
@@ -11,44 +9,77 @@ let Cube = class {
         this.positionBuffer = gl.createBuffer();
         gl.bindBuffer(gl.ARRAY_BUFFER, this.positionBuffer);
 
-        const width = 1.0;
-        const height = 1.0;
-        const length = 1.0;
+        const width = 0.5;
+        const height = 0.5;
+        const length = 100.0;
+        const gauge = 4.0;
+        const gaps = 5.0;
 
-        // Now create an array of positions for the cube.
          this.positions = [
-           // Front face
-           -width/2, -height/2,  length/2,
-            width/2, -height/2,  length/2,
-            width/2,  height/2,  length/2,
-           -width/2,  height/2,  length/2,
-           // Back face
-            width/2,  height/2, -length/2,
-           -width/2,  height/2, -length/2,
-           -width/2, -height/2, -length/2,
-            width/2, -height/2, -length/2,
-           // Top face
-           -width/2, -height/2,  length/2,
-            width/2, -height/2,  length/2,
-            width/2, -height/2, -length/2,
-           -width/2, -height/2, -length/2,
-           // Bottom face
-           -width/2,  height/2,  length/2,
-            width/2,  height/2,  length/2,
-            width/2,  height/2, -length/2,
-           -width/2,  height/2, -length/2,
-           //Left face
-           -width/2,  height/2, -length/2,
-           -width/2,  height/2,  length/2,
-           -width/2, -height/2,  length/2,
-           -width/2, -height/2, -length/2,
-            //Right face
-            width/2,  height/2, -length/2,
-            width/2,  height/2,  length/2,
-            width/2, -height/2,  length/2,
-            width/2, -height/2, -length/2,
-        ];
+        // left track
+             // Front face
+             -width/2 - gauge/2, -height/2,  length,
+              width/2 - gauge/2, -height/2,  length,
+              width/2 - gauge/2,  height/2,  length,
+             -width/2 - gauge/2,  height/2,  length,
+             // Back face
+              width/2 - gauge/2,  height/2,     0.0,
+             -width/2 - gauge/2,  height/2,     0.0,
+             -width/2 - gauge/2, -height/2,     0.0,
+              width/2 - gauge/2, -height/2,     0.0,
+             // Top face
+             -width/2 - gauge/2, -height/2,  length,
+              width/2 - gauge/2, -height/2,  length,
+              width/2 - gauge/2, -height/2,     0.0,
+             -width/2 - gauge/2, -height/2,     0.0,
+             // Bottom face
+             -width/2 - gauge/2,  height/2,  length,
+              width/2 - gauge/2,  height/2,  length,
+              width/2 - gauge/2,  height/2,     0.0,
+             -width/2 - gauge/2,  height/2,     0.0,
+             //Left face
+             -width/2 - gauge/2,  height/2,     0.0,
+             -width/2 - gauge/2,  height/2,  length,
+             -width/2 - gauge/2, -height/2,  length,
+             -width/2 - gauge/2, -height/2,     0.0,
+              //Right face
+              width/2 - gauge/2,  height/2,     0.0,
+              width/2 - gauge/2,  height/2,  length,
+              width/2 - gauge/2, -height/2,  length,
+              width/2 - gauge/2, -height/2,     0.0,
 
+        // Right track
+           // Front face
+           -width/2 + gauge/2, -height/2,  length,
+            width/2 + gauge/2, -height/2,  length,
+            width/2 + gauge/2,  height/2,  length,
+           -width/2 + gauge/2,  height/2,  length,
+           // Back face
+            width/2 + gauge/2,  height/2,     0.0,
+           -width/2 + gauge/2,  height/2,     0.0,
+           -width/2 + gauge/2, -height/2,     0.0,
+            width/2 + gauge/2, -height/2,     0.0,
+           // Top face
+           -width/2 + gauge/2, -height/2,  length,
+            width/2 + gauge/2, -height/2,  length,
+            width/2 + gauge/2, -height/2,     0.0,
+           -width/2 + gauge/2, -height/2,     0.0,
+           // Bottom face
+           -width/2 + gauge/2,  height/2,  length,
+            width/2 + gauge/2,  height/2,  length,
+            width/2 + gauge/2,  height/2,     0.0,
+           -width/2 + gauge/2,  height/2,     0.0,
+           //Left face
+           -width/2 + gauge/2,  height/2,     0.0,
+           -width/2 + gauge/2,  height/2,  length,
+           -width/2 + gauge/2, -height/2,  length,
+           -width/2 + gauge/2, -height/2,     0.0,
+            //Right face
+            width/2 + gauge/2,  height/2,     0.0,
+            width/2 + gauge/2,  height/2,  length,
+            width/2 + gauge/2, -height/2,  length,
+            width/2 + gauge/2, -height/2,     0.0,
+        ];
 
         // Now pass the list of positions into WebGL to build the
         // shape. We do this by creating a Float32Array from the
@@ -58,6 +89,13 @@ let Cube = class {
 
         // Now set up the colors for the faces. We'll use solid colors for each face.
         this.faceColors = [
+            [0.0,  1.0,  1.0,  1.0],    // Front face: cyan
+            [1.0,  0.0,  0.0,  1.0],    // Back face: red
+            [0.0,  1.0,  0.0,  1.0],    // Top face: Green
+            [0.0,  0.0,  1.0,  1.0],    // Bottom face: Blue
+            [1.0,  1.0,  0.0,  1.0],    // Left face: purple
+            [1.0,  1.0,  1.0,  1.0],    // Right face: white
+
             [0.0,  1.0,  1.0,  1.0],    // Front face: cyan
             [1.0,  0.0,  0.0,  1.0],    // Back face: red
             [0.0,  1.0,  0.0,  1.0],    // Top face: Green
@@ -86,8 +124,7 @@ let Cube = class {
         gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER, indexBuffer);
 
         // This array defines each face as two triangles, using the
-        // indices into the vertex array to specify each triangle's
-        // position.
+        // indices into the vertex array to specify each triangle's position.
 
         const indices = [
             0,  1,  2,      0,  2,  3,    // front
@@ -96,6 +133,13 @@ let Cube = class {
            15, 12, 13,     15, 13, 14,    // bottom
            19, 16, 17,     19, 17, 18,    // left
            23, 20, 21,     23, 21, 22,    // right
+
+           0+24,  1+24,  2+24,  0+24,  2+24,  3+24,    // front
+           7+24,  4+24,  5+24,  7+24,  5+24,  6+24,    // back
+          11+24,  8+24,  9+24, 11+24,  9+24, 10+24,    // top
+          15+24, 12+24, 13+24, 15+24, 13+24, 14+24,    // bottom
+          19+24, 16+24, 17+24, 19+24, 17+24, 18+24,    // left
+          23+24, 20+24, 21+24, 23+24, 21+24, 22+24,    // right
         ];
 
         // Now send the element array to GL
@@ -122,16 +166,6 @@ let Cube = class {
         mat4.translate(modelViewMatrix,     // destination matrix
                        modelViewMatrix,     // matrix to translate
                        this.pos);  // amount to translate
-
-        //Write your code to Rotate the cube here//
-        mat4.rotate(modelViewMatrix,
-                   modelViewMatrix,
-                   cubeRotation,
-                   [1.0, 1.0, 0.0]);
-        mat4.rotate(modelViewMatrix,
-                  modelViewMatrix,
-                  cubeRotation/2,
-                  [0.0, 1.0, 0.0]);
 
       // Tell WebGL how to pull out the positions from the position
       // buffer into the vertexPosition attribute
@@ -192,14 +226,10 @@ let Cube = class {
             modelViewMatrix);
 
         {
-            const vertexCount = 6 * 6;
+            const vertexCount = 2 * 6 * 6;
             const type = gl.UNSIGNED_SHORT;
             const offset = 0;
             gl.drawElements(gl.TRIANGLES, vertexCount, type, offset);
         }
-
-        // Update the rotation for the next draw
-
-        cubeRotation += deltaTime;
     }
 };

@@ -2,21 +2,21 @@ var cubeRotation = 0.0;
 
 main();
 
-//
 // Start here
-//
 
 var c;
-var c1;
+var ground;
 
 function main() {
   const canvas = document.querySelector('#glcanvas');
   const gl = canvas.getContext('webgl') || canvas.getContext('experimental-webgl');
 
-  c = new cube(gl, [2, 5.0, -3.0]);
-  c1 = new cube(gl, [1.5, 0.0, -6.0]);
-  // If we don't have a GL context, give up now
+  c = new Cube(gl, [0, 0, 0]);
+  ground = new Ground(gl, [0, -5, 0]);
+  rail = new Rail(gl, [0, -5, 0]);
+  // rail1 = new Rail(gl, [0, -5, 0]);
 
+  // If we don't have a GL context, give up now
   if (!gl) {
     alert('Unable to initialize WebGL. Your browser or machine may not support it.');
     return;
@@ -88,9 +88,7 @@ function main() {
   requestAnimationFrame(render);
 }
 
-//
 // Draw the scene.
-//
 function drawScene(gl, programInfo, deltaTime) {
   gl.clearColor(0.0, 0.0, 0.0, 1.0);  // Clear to black, fully opaque
   gl.clearDepth(1.0);                 // Clear everything
@@ -125,7 +123,7 @@ function drawScene(gl, programInfo, deltaTime) {
   // Set the drawing position to the "identity" point, which is
   // the center of the scene.
     var cameraMatrix = mat4.create();
-    mat4.translate(cameraMatrix, cameraMatrix, [2, 5, 0]);
+    mat4.translate(cameraMatrix, cameraMatrix, [0, 0, 0]);
     var cameraPosition = [
       cameraMatrix[12],
       cameraMatrix[13],
@@ -134,7 +132,7 @@ function drawScene(gl, programInfo, deltaTime) {
 
     var up = [0, 1, 0];
 
-    mat4.lookAt(cameraMatrix, cameraPosition, c.pos, up);
+    mat4.lookAt(cameraMatrix, cameraPosition, [0, 0, 50], up);
 
     var viewMatrix = cameraMatrix;//mat4.create();
 
@@ -144,14 +142,13 @@ function drawScene(gl, programInfo, deltaTime) {
 
     mat4.multiply(viewProjectionMatrix, projectionMatrix, viewMatrix);
 
-  c.drawCube(gl, viewProjectionMatrix, programInfo, deltaTime);
-  //c1.drawCube(gl, projectionMatrix, programInfo, deltaTime);
+    // c.drawCube(gl, viewProjectionMatrix, programInfo, deltaTime);
+    ground.drawCube(gl, viewProjectionMatrix, programInfo, deltaTime);
+    rail.drawCube(gl, viewProjectionMatrix, programInfo, deltaTime);
 
 }
 
-//
 // Initialize a shader program, so WebGL knows how to draw our data
-//
 function initShaderProgram(gl, vsSource, fsSource) {
   const vertexShader = loadShader(gl, gl.VERTEX_SHADER, vsSource);
   const fragmentShader = loadShader(gl, gl.FRAGMENT_SHADER, fsSource);
@@ -173,10 +170,7 @@ function initShaderProgram(gl, vsSource, fsSource) {
   return shaderProgram;
 }
 
-//
-// creates a shader of the given type, uploads the source and
-// compiles it.
-//
+// creates a shader of the given type, uploads the source and compiles it.
 function loadShader(gl, type, source) {
   const shader = gl.createShader(type);
 
