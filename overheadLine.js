@@ -1,4 +1,4 @@
-let Rail = class {
+let OverheadLine = class {
     constructor(gl, pos) {
 
         this.pos = pos;
@@ -9,10 +9,10 @@ let Rail = class {
         this.positionBuffer = gl.createBuffer();
         gl.bindBuffer(gl.ARRAY_BUFFER, this.positionBuffer);
 
-        const width = 0.5;
-        const height = 0.5;
+        const width = 0.05;
+        const height = 0.05;
         const length = 100.0;
-        const gauge = 3.5;
+        const gauge = 10;
 
         this.positions = [];
         this.faceColors = [];
@@ -81,9 +81,48 @@ let Rail = class {
             width/2 + gauge/2,  height/2,  length,
             width/2 + gauge/2, -height/2,  length,
             width/2 + gauge/2, -height/2,     0.0,
+
+        // left track
+             // Front face
+             -width/2, -height/2,  length,
+              width/2, -height/2,  length,
+              width/2,  height/2,  length,
+             -width/2,  height/2,  length,
+             // Back face
+              width/2,  height/2,     0.0,
+             -width/2,  height/2,     0.0,
+             -width/2, -height/2,     0.0,
+              width/2, -height/2,     0.0,
+             // Top face
+             -width/2, -height/2,  length,
+              width/2, -height/2,  length,
+              width/2, -height/2,     0.0,
+             -width/2, -height/2,     0.0,
+             // Bottom face
+             -width/2,  height/2,  length,
+              width/2,  height/2,  length,
+              width/2,  height/2,     0.0,
+             -width/2,  height/2,     0.0,
+             //Left face
+             -width/2,  height/2,     0.0,
+             -width/2,  height/2,  length,
+             -width/2, -height/2,  length,
+             -width/2, -height/2,     0.0,
+              //Right face
+              width/2,  height/2,     0.0,
+              width/2,  height/2,  length,
+              width/2, -height/2,  length,
+              width/2, -height/2,     0.0,
         ];
         // Now set up the colors for the faces. We'll use solid colors for each face.
         this.faceColors = [
+            [0.0,  1.0,  1.0,  1.0],    // Front face: cyan
+            [1.0,  0.0,  0.0,  1.0],    // Back face: red
+            [0.0,  1.0,  0.0,  1.0],    // Top face: Green
+            [0.0,  0.0,  1.0,  1.0],    // Bottom face: Blue
+            [1.0,  1.0,  0.0,  1.0],    // Left face: purple
+            [1.0,  1.0,  1.0,  1.0],    // Right face: white
+
             [0.0,  1.0,  1.0,  1.0],    // Front face: cyan
             [1.0,  0.0,  0.0,  1.0],    // Back face: red
             [0.0,  1.0,  0.0,  1.0],    // Top face: Green
@@ -113,6 +152,13 @@ let Rail = class {
           15+24, 12+24, 13+24, 15+24, 13+24, 14+24,    // bottom
           19+24, 16+24, 17+24, 19+24, 17+24, 18+24,    // left
           23+24, 20+24, 21+24, 23+24, 21+24, 22+24,    // right
+
+          0+48,  1+48,  2+48,  0+48,  2+48,  3+48,    // front
+          7+48,  4+48,  5+48,  7+48,  5+48,  6+48,    // back
+         11+48,  8+48,  9+48, 11+48,  9+48, 10+48,    // top
+         15+48, 12+48, 13+48, 15+48, 13+48, 14+48,    // bottom
+         19+48, 16+48, 17+48, 19+48, 17+48, 18+48,    // left
+         23+48, 20+48, 21+48, 23+48, 21+48, 22+48,    // right
         ];
 
         const faceColors_2 = [
@@ -126,42 +172,43 @@ let Rail = class {
 
         // Gauges making
         var len = 10;
-        const side = 0.3;
-        const space = 5.0;
-        var count = 1;
+        const side = 0.1;
+        const space = 10.0;
+        const breadth = 9.0;
+        var count = 2;
         for(len = 10; len<length; len+=space){
             count++;
             var positions = [
                 // Front face
-                -gauge/2 * 1.25, -side/2,  len + side/2,
-                 gauge/2 * 1.25, -side/2,  len + side/2,
-                 gauge/2 * 1.25,  side/2,  len + side/2,
-                -gauge/2 * 1.25,  side/2,  len + side/2,
+                -breadth, -side/2,  len + side/2,
+                 breadth, -side/2,  len + side/2,
+                 breadth,  side/2,  len + side/2,
+                -breadth,  side/2,  len + side/2,
                 // Back face
-                 gauge/2 * 1.25,  side/2,  len - side/2,
-                -gauge/2 * 1.25,  side/2,  len - side/2,
-                -gauge/2 * 1.25, -side/2,  len - side/2,
-                 gauge/2 * 1.25, -side/2,  len - side/2,
+                 breadth,  side/2,  len - side/2,
+                -breadth,  side/2,  len - side/2,
+                -breadth, -side/2,  len - side/2,
+                 breadth, -side/2,  len - side/2,
                 // Top face
-                -gauge/2 * 1.25, -side/2,  len + side/2,
-                 gauge/2 * 1.25, -side/2,  len + side/2,
-                 gauge/2 * 1.25, -side/2,  len - side/2,
-                -gauge/2 * 1.25, -side/2,  len - side/2,
+                -breadth, -side/2,  len + side/2,
+                 breadth, -side/2,  len + side/2,
+                 breadth, -side/2,  len - side/2,
+                -breadth, -side/2,  len - side/2,
                 // Bottom face
-                -gauge/2 * 1.25,  side/2,  len + side/2,
-                 gauge/2 * 1.25,  side/2,  len + side/2,
-                 gauge/2 * 1.25,  side/2,  len - side/2,
-                -gauge/2 * 1.25,  side/2,  len - side/2,
+                -breadth,  side/2,  len + side/2,
+                 breadth,  side/2,  len + side/2,
+                 breadth,  side/2,  len - side/2,
+                -breadth,  side/2,  len - side/2,
                 //Left face
-                -gauge/2 * 1.25,  side/2,  len - side/2,
-                -gauge/2 * 1.25,  side/2,  len + side/2,
-                -gauge/2 * 1.25, -side/2,  len + side/2,
-                -gauge/2 * 1.25, -side/2,  len - side/2,
+                -breadth,  side/2,  len - side/2,
+                -breadth,  side/2,  len + side/2,
+                -breadth, -side/2,  len + side/2,
+                -breadth, -side/2,  len - side/2,
                  //Right face
-                 gauge/2 * 1.25,  side/2,  len - side/2,
-                 gauge/2 * 1.25,  side/2,  len + side/2,
-                 gauge/2 * 1.25, -side/2,  len + side/2,
-                 gauge/2 * 1.25, -side/2,  len - side/2,
+                 breadth,  side/2,  len - side/2,
+                 breadth,  side/2,  len + side/2,
+                 breadth, -side/2,  len + side/2,
+                 breadth, -side/2,  len - side/2,
              ]
              this.positions.push(...positions);
              this.faceColors.push(...faceColors_2);

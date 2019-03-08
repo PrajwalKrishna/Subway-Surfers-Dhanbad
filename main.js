@@ -2,19 +2,12 @@ var cubeRotation = 0.0;
 
 main();
 
-// Start here
-
-var c;
-var ground;
-
 function main() {
   const canvas = document.querySelector('#glcanvas');
   const gl = canvas.getContext('webgl') || canvas.getContext('experimental-webgl');
 
-  c = new Cube(gl, [0, 0, 0]);
-  ground = new Ground(gl, [0, -5, 0]);
-  rail = new Rail(gl, [0, -5, 0]);
-  // rail1 = new Rail(gl, [0, -5, 0]);
+  // From engine.js
+  init(gl);
 
   // If we don't have a GL context, give up now
   if (!gl) {
@@ -132,7 +125,7 @@ function drawScene(gl, programInfo, deltaTime) {
 
     var up = [0, 1, 0];
 
-    mat4.lookAt(cameraMatrix, cameraPosition, [0, 0, 50], up);
+    mat4.lookAt(cameraMatrix, cameraPosition, [0, 0, position+50], up);
 
     var viewMatrix = cameraMatrix;//mat4.create();
 
@@ -142,10 +135,11 @@ function drawScene(gl, programInfo, deltaTime) {
 
     mat4.multiply(viewProjectionMatrix, projectionMatrix, viewMatrix);
 
-    // c.drawCube(gl, viewProjectionMatrix, programInfo, deltaTime);
-    ground.drawCube(gl, viewProjectionMatrix, programInfo, deltaTime);
-    rail.drawCube(gl, viewProjectionMatrix, programInfo, deltaTime);
-
+    // From engine.js
+    tick(deltaTime);
+    
+    // From engine.js
+    draw(gl, viewProjectionMatrix, programInfo, deltaTime);
 }
 
 // Initialize a shader program, so WebGL knows how to draw our data
