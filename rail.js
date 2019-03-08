@@ -1,7 +1,10 @@
 let Rail = class {
     constructor(gl, pos) {
-
         this.pos = pos;
+
+        const url = './Textures/rail.jpg';
+        this.texture = loadTexture(gl, url);
+
         // Select the positionBuffer as the one to apply buffer
         // operations to from here out.
 
@@ -82,22 +85,69 @@ let Rail = class {
             width/2 + gauge/2, -height/2,  length,
             width/2 + gauge/2, -height/2,     0.0,
         ];
-        // Now set up the colors for the faces. We'll use solid colors for each face.
-        this.faceColors = [
-            [0.0,  1.0,  1.0,  1.0],    // Front face: cyan
-            [1.0,  0.0,  0.0,  1.0],    // Back face: red
-            [0.0,  1.0,  0.0,  1.0],    // Top face: Green
-            [0.0,  0.0,  1.0,  1.0],    // Bottom face: Blue
-            [1.0,  1.0,  0.0,  1.0],    // Left face: purple
-            [1.0,  1.0,  1.0,  1.0],    // Right face: white
 
-            [0.0,  1.0,  1.0,  1.0],    // Front face: cyan
-            [1.0,  0.0,  0.0,  1.0],    // Back face: red
-            [0.0,  1.0,  0.0,  1.0],    // Top face: Green
-            [0.0,  0.0,  1.0,  1.0],    // Bottom face: Blue
-            [1.0,  1.0,  0.0,  1.0],    // Left face: purple
-            [1.0,  1.0,  1.0,  1.0],    // Right face: white
-        ];
+         this.textureCoordinates = [
+           // Front
+           0.0,  0.0,
+           1.0,  0.0,
+           1.0,  1.0,
+           0.0,  1.0,
+           // Back
+           0.0,  0.0,
+           1.0,  0.0,
+           1.0,  1.0,
+           0.0,  1.0,
+           // Top
+           0.0,  0.0,
+           1.0,  0.0,
+           1.0,  1.0,
+           0.0,  1.0,
+           // Bottom
+           0.0,  0.0,
+           1.0,  0.0,
+           1.0,  1.0,
+           0.0,  1.0,
+           // Right
+           0.0,  0.0,
+           1.0,  0.0,
+           1.0,  1.0,
+           0.0,  1.0,
+           // Left
+           0.0,  0.0,
+           1.0,  0.0,
+           1.0,  1.0,
+           0.0,  1.0,
+           // Front
+           0.0,  0.0,
+           1.0,  0.0,
+           1.0,  1.0,
+           0.0,  1.0,
+           // Back
+           0.0,  0.0,
+           1.0,  0.0,
+           1.0,  1.0,
+           0.0,  1.0,
+           // Top
+           0.0,  0.0,
+           1.0,  0.0,
+           1.0,  1.0,
+           0.0,  1.0,
+           // Bottom
+           0.0,  0.0,
+           1.0,  0.0,
+           1.0,  1.0,
+           0.0,  1.0,
+           // Right
+           0.0,  0.0,
+           1.0,  0.0,
+           1.0,  1.0,
+           0.0,  1.0,
+           // Left
+           0.0,  0.0,
+           1.0,  0.0,
+           1.0,  1.0,
+           0.0,  1.0,
+         ];
 
         this.indices = [
             0,  1,  2,      0,  2,  3,    // front
@@ -115,14 +165,38 @@ let Rail = class {
           23+24, 20+24, 21+24, 23+24, 21+24, 22+24,    // right
         ];
 
-        const faceColors_2 = [
-            [0.0,  1.0,  1.0,  1.0],    // Front face: cyan
-            [1.0,  0.0,  0.0,  1.0],    // Back face: red
-            [0.0,  1.0,  0.0,  1.0],    // Top face: Green
-            [0.0,  0.0,  1.0,  1.0],    // Bottom face: Blue
-            [1.0,  1.0,  0.0,  1.0],    // Left face: purple
-            [1.0,  1.0,  1.0,  1.0],    // Right face: white
-        ]
+        const textureCoordinates_2 = [
+          // Front
+          0.0,  0.0,
+          1.0,  0.0,
+          1.0,  1.0,
+          0.0,  1.0,
+          // Back
+          0.0,  0.0,
+          1.0,  0.0,
+          1.0,  1.0,
+          0.0,  1.0,
+          // Top
+          0.0,  0.0,
+          1.0,  0.0,
+          1.0,  1.0,
+          0.0,  1.0,
+          // Bottom
+          0.0,  0.0,
+          1.0,  0.0,
+          1.0,  1.0,
+          0.0,  1.0,
+          // Right
+          0.0,  0.0,
+          1.0,  0.0,
+          1.0,  1.0,
+          0.0,  1.0,
+          // Left
+          0.0,  0.0,
+          1.0,  0.0,
+          1.0,  1.0,
+          0.0,  1.0,
+        ];
 
         // Gauges making
         var len = 10;
@@ -164,7 +238,7 @@ let Rail = class {
                  gauge/2 * 1.25, -side/2,  len - side/2,
              ]
              this.positions.push(...positions);
-             this.faceColors.push(...faceColors_2);
+             this.textureCoordinates.push(...textureCoordinates_2);
              let indices_2 = [
                  0 + count*24,  1 + count*24,  2 + count * 24,      0 + count*24,  2 + count*24,  3+count*24,    // front
                  7 + count*24,  4 + count*24,  5 + count * 24,      7 + count*24,  5 + count*24,  6+count*24,    // back
@@ -175,7 +249,7 @@ let Rail = class {
             ]
 
              this.indices.push(...indices_2);
-             console.log(this.positions.length, this.faceColors.length, this.indices.length)
+             // console.log(this.positions.length, this.faceColors.length, this.indices.length)
          }
 
          // Now pass the list of positions into WebGL to build the
@@ -183,22 +257,26 @@ let Rail = class {
          // JavaScript array, then use it to fill the current buffer.
 
          gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(this.positions), gl.STATIC_DRAW);
-         // Convert the array of colors into a table for all the vertices.
-         var colors = [];
+         // // Convert the array of colors into a table for all the vertices.
+         // var colors = [];
+         //
+         // for (var j = 0; j < this.faceColors.length; ++j) {
+         //     const c = this.faceColors[j];
+         //     // Repeat each color four times for the four vertices of the face
+         //     colors = colors.concat(c, c, c, c);
+         // }
 
-         for (var j = 0; j < this.faceColors.length; ++j) {
-             const c = this.faceColors[j];
-             // Repeat each color four times for the four vertices of the face
-             colors = colors.concat(c, c, c, c);
-         }
+         // const colorBuffer = gl.createBuffer();
+         // gl.bindBuffer(gl.ARRAY_BUFFER, colorBuffer);
+         // gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(colors), gl.STATIC_DRAW);
 
-         const colorBuffer = gl.createBuffer();
-         gl.bindBuffer(gl.ARRAY_BUFFER, colorBuffer);
-         gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(colors), gl.STATIC_DRAW);
+         // Now set up the texture coordinates for the faces.
+          const textureCoordBuffer = gl.createBuffer();
+          gl.bindBuffer(gl.ARRAY_BUFFER, textureCoordBuffer);
+          gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(this.textureCoordinates), gl.STATIC_DRAW);
 
          // Build the element array buffer; this specifies the indices
          // into the vertex arrays for each face's vertices.
-
          const indexBuffer = gl.createBuffer();
          gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER, indexBuffer);
 
@@ -209,7 +287,7 @@ let Rail = class {
 
             this.buffer = {
                 position: this.positionBuffer,
-                color: colorBuffer,
+                textureCoord: textureCoordBuffer,
                 indices: indexBuffer,
                 number: count,
             }
@@ -247,24 +325,16 @@ let Rail = class {
                 programInfo.attribLocations.vertexPosition);
         }
 
-        // Tell WebGL how to pull out the colors from the color buffer
-        // into the vertexColor attribute.
+        // tell webgl how to pull out the texture coordinates from buffer
         {
-            const numComponents = 4;
-            const type = gl.FLOAT;
-            const normalize = false;
-            const stride = 0;
-            const offset = 0;
-            gl.bindBuffer(gl.ARRAY_BUFFER, this.buffer.color);
-            gl.vertexAttribPointer(
-                programInfo.attribLocations.vertexColor,
-                numComponents,
-                type,
-                normalize,
-                stride,
-                offset);
-            gl.enableVertexAttribArray(
-                programInfo.attribLocations.vertexColor);
+            const num = 2; // every coordinate composed of 2 values
+            const type = gl.FLOAT; // the data in the buffer is 32 bit float
+            const normalize = false; // don't normalize
+            const stride = 0; // how many bytes to get from one set to the next
+            const offset = 0; // how many bytes inside the buffer to start from
+            gl.bindBuffer(gl.ARRAY_BUFFER, this.buffer.textureCoord);
+            gl.vertexAttribPointer(programInfo.attribLocations.textureCoord, num, type, normalize, stride, offset);
+            gl.enableVertexAttribArray(programInfo.attribLocations.textureCoord);
         }
 
         // Tell WebGL which indices to use to index the vertices
@@ -284,6 +354,16 @@ let Rail = class {
             programInfo.uniformLocations.modelViewMatrix,
             false,
             modelViewMatrix);
+
+             // Tell WebGL we want to affect texture unit 0
+              gl.activeTexture(gl.TEXTURE0);
+
+              // Bind the texture to texture unit 0
+              gl.bindTexture(gl.TEXTURE_2D, this.texture);
+
+              // Tell the shader we bound the texture to texture unit 0
+              gl.uniform1i(programInfo.uniformLocations.uSampler, 0);
+
 
         {
             const vertexCount = this.buffer.number * 36 + 36;

@@ -1,10 +1,6 @@
-let Ground = class {
+let Miner = class {
     constructor(gl, pos) {
         this.pos = pos;
-
-        const url = './Textures/coal_2.jpg';
-        this.texture = loadTexture(gl, url);
-
         // Select the positionBuffer as the one to apply buffer
         // operations to from here out.
 
@@ -12,42 +8,44 @@ let Ground = class {
         this.positionBuffer = gl.createBuffer();
         gl.bindBuffer(gl.ARRAY_BUFFER, this.positionBuffer);
 
-        const width = 20.0;
-        const height = 0.0;
-        const length = 100.0;
+        const width = 4.0;
+        const height = 3.5;
+        const length = 10.0;
+
         // Now create an array of positions for the cube.
          this.positions = [
            // Front face
-           -width/2, -height/2,  length,
-            width/2, -height/2,  length,
-            width/2,  height/2,  length,
-           -width/2,  height/2,  length,
+           -width/2,     0.0,  length/2,
+            width/2,     0.0,  length/2,
+            width/2,  height,  length/2,
+           -width/2,  height,  length/2,
            // Back face
-            width/2,  height/2,     0.0,
-           -width/2,  height/2,     0.0,
-           -width/2, -height/2,     0.0,
-            width/2, -height/2,     0.0,
+            width/2,  height, -length/2,
+           -width/2,  height, -length/2,
+           -width/2,     0.0, -length/2,
+            width/2,     0.0, -length/2,
            // Top face
-           -width/2, -height/2,  length,
-            width/2, -height/2,  length,
-            width/2, -height/2,     0.0,
-           -width/2, -height/2,     0.0,
+           -width/2,     0.0,  length/2,
+            width/2,     0.0,  length/2,
+            width/2,     0.0, -length/2,
+           -width/2,     0.0, -length/2,
            // Bottom face
-           -width/2,  height/2,  length,
-            width/2,  height/2,  length,
-            width/2,  height/2,     0.0,
-           -width/2,  height/2,     0.0,
+           -width/2,  height,  length/2,
+            width/2,  height,  length/2,
+            width/2,  height, -length/2,
+           -width/2,  height, -length/2,
            //Left face
-           -width/2,  height/2,     0.0,
-           -width/2,  height/2,  length,
-           -width/2, -height/2,  length,
-           -width/2, -height/2,     0.0,
+           -width/2,  height, -length/2,
+           -width/2,  height,  length/2,
+           -width/2,     0.0,  length/2,
+           -width/2,     0.0, -length/2,
             //Right face
-            width/2,  height/2,     0.0,
-            width/2,  height/2,  length,
-            width/2, -height/2,  length,
-            width/2, -height/2,     0.0,
+            width/2,  height, -length/2,
+            width/2,  height,  length/2,
+            width/2,     0.0,  length/2,
+            width/2,     0.0, -length/2,
         ];
+
 
         // Now pass the list of positions into WebGL to build the
         // shape. We do this by creating a Float32Array from the
@@ -59,8 +57,8 @@ let Ground = class {
         this.faceColors = [
             [0.0,  1.0,  1.0,  1.0],    // Front face: cyan
             [1.0,  0.0,  0.0,  1.0],    // Back face: red
-            [0.0,  0.0,  1.0,  1.0],    // Top face: Blue
-            [0.0,  1.0,  0.0,  1.0],    // Bottom face: Green
+            [0.0,  1.0,  0.0,  1.0],    // Top face: Green
+            [0.0,  0.0,  1.0,  1.0],    // Bottom face: Blue
             [1.0,  1.0,  0.0,  1.0],    // Left face: purple
             [1.0,  1.0,  1.0,  1.0],    // Right face: white
         ];
@@ -80,46 +78,6 @@ let Ground = class {
 
         // Build the element array buffer; this specifies the indices
         // into the vertex arrays for each face's vertices.
-
-        // Now set up the texture coordinates for the faces.
-         const textureCoordBuffer = gl.createBuffer();
-         gl.bindBuffer(gl.ARRAY_BUFFER, textureCoordBuffer);
-
-         const textureCoordinates = [
-           // Front
-           0.0,  0.0,
-           1.0,  0.0,
-           1.0,  1.0,
-           0.0,  1.0,
-           // Back
-           0.0,  0.0,
-           1.0,  0.0,
-           1.0,  1.0,
-           0.0,  1.0,
-           // Top
-           0.0,  0.0,
-           1.0,  0.0,
-           1.0,  1.0,
-           0.0,  1.0,
-           // Bottom
-           0.0,  0.0,
-           1.0,  0.0,
-           1.0,  1.0,
-           0.0,  1.0,
-           // Right
-           0.0,  0.0,
-           1.0,  0.0,
-           1.0,  1.0,
-           0.0,  1.0,
-           // Left
-           0.0,  0.0,
-           1.0,  0.0,
-           1.0,  1.0,
-           0.0,  1.0,
-         ];
-
-         gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(textureCoordinates),gl.STATIC_DRAW);
-
 
         const indexBuffer = gl.createBuffer();
         gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER, indexBuffer);
@@ -144,7 +102,7 @@ let Ground = class {
 
         this.buffer = {
             position: this.positionBuffer,
-            textureCoord: textureCoordBuffer,
+            color: colorBuffer,
             indices: indexBuffer,
         }
 
@@ -182,16 +140,24 @@ let Ground = class {
                 programInfo.attribLocations.vertexPosition);
         }
 
-        // tell webgl how to pull out the texture coordinates from buffer
+        // Tell WebGL how to pull out the colors from the color buffer
+        // into the vertexColor attribute.
         {
-            const num = 2; // every coordinate composed of 2 values
-            const type = gl.FLOAT; // the data in the buffer is 32 bit float
-            const normalize = false; // don't normalize
-            const stride = 0; // how many bytes to get from one set to the next
-            const offset = 0; // how many bytes inside the buffer to start from
-            gl.bindBuffer(gl.ARRAY_BUFFER, this.buffer.textureCoord);
-            gl.vertexAttribPointer(programInfo.attribLocations.textureCoord, num, type, normalize, stride, offset);
-            gl.enableVertexAttribArray(programInfo.attribLocations.textureCoord);
+            const numComponents = 4;
+            const type = gl.FLOAT;
+            const normalize = false;
+            const stride = 0;
+            const offset = 0;
+            gl.bindBuffer(gl.ARRAY_BUFFER, this.buffer.color);
+            gl.vertexAttribPointer(
+                programInfo.attribLocations.vertexColor,
+                numComponents,
+                type,
+                normalize,
+                stride,
+                offset);
+            gl.enableVertexAttribArray(
+                programInfo.attribLocations.vertexColor);
         }
 
         // Tell WebGL which indices to use to index the vertices
@@ -202,15 +168,6 @@ let Ground = class {
         gl.useProgram(programInfo.program);
 
         // Set the shader uniforms
-        
-        // Tell WebGL we want to affect texture unit 0
-        gl.activeTexture(gl.TEXTURE0);
-
-        // Bind the texture to texture unit 0
-        gl.bindTexture(gl.TEXTURE_2D, this.texture);
-
-        // Tell the shader we bound the texture to texture unit 0
-        gl.uniform1i(programInfo.uniformLocations.uSampler, 0);
 
         gl.uniformMatrix4fv(
             programInfo.uniformLocations.projectionMatrix,

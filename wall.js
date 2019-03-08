@@ -1,6 +1,14 @@
 let Wall = class {
     constructor(gl, pos) {
         this.pos = pos;
+        let url = '';
+        // if(rand() % 2)
+        //     url = './Textures/wallTexture.jpg';
+        // else
+            url = './Textures/poster_2.jpeg';
+
+        this.texture = loadTexture(gl, url);
+
         // Select the positionBuffer as the one to apply buffer
         // operations to from here out.
 
@@ -76,6 +84,47 @@ let Wall = class {
         gl.bindBuffer(gl.ARRAY_BUFFER, colorBuffer);
         gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(colors), gl.STATIC_DRAW);
 
+        // Now set up the texture coordinates for the faces.
+         const textureCoordBuffer = gl.createBuffer();
+         gl.bindBuffer(gl.ARRAY_BUFFER, textureCoordBuffer);
+
+         const textureCoordinates = [
+           // Front
+           0.0,  0.0,
+           1.0,  0.0,
+           1.0,  1.0,
+           0.0,  1.0,
+           // Back
+           0.0,  0.0,
+           1.0,  0.0,
+           1.0,  1.0,
+           0.0,  1.0,
+           // Top
+           0.0,  0.0,
+           1.0,  0.0,
+           1.0,  1.0,
+           0.0,  1.0,
+           // Bottom
+           0.0,  0.0,
+           1.0,  0.0,
+           1.0,  1.0,
+           0.0,  1.0,
+           // Right
+           0.0,  0.0,
+           1.0,  0.0,
+           1.0,  1.0,
+           0.0,  1.0,
+           // Left
+           0.0,  0.0,
+           1.0,  0.0,
+           1.0,  1.0,
+           0.0,  1.0,
+         ];
+
+         gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(textureCoordinates),gl.STATIC_DRAW);
+
+
+
         // Build the element array buffer; this specifies the indices
         // into the vertex arrays for each face's vertices.
 
@@ -102,7 +151,7 @@ let Wall = class {
 
         this.buffer = {
             position: this.positionBuffer,
-            color: colorBuffer,
+            textureCoord: textureCoordBuffer,
             indices: indexBuffer,
         }
 
@@ -140,24 +189,16 @@ let Wall = class {
                 programInfo.attribLocations.vertexPosition);
         }
 
-        // Tell WebGL how to pull out the colors from the color buffer
-        // into the vertexColor attribute.
+        // tell webgl how to pull out the texture coordinates from buffer
         {
-            const numComponents = 4;
-            const type = gl.FLOAT;
-            const normalize = false;
-            const stride = 0;
-            const offset = 0;
-            gl.bindBuffer(gl.ARRAY_BUFFER, this.buffer.color);
-            gl.vertexAttribPointer(
-                programInfo.attribLocations.vertexColor,
-                numComponents,
-                type,
-                normalize,
-                stride,
-                offset);
-            gl.enableVertexAttribArray(
-                programInfo.attribLocations.vertexColor);
+            const num = 2; // every coordinate composed of 2 values
+            const type = gl.FLOAT; // the data in the buffer is 32 bit float
+            const normalize = false; // don't normalize
+            const stride = 0; // how many bytes to get from one set to the next
+            const offset = 0; // how many bytes inside the buffer to start from
+            gl.bindBuffer(gl.ARRAY_BUFFER, this.buffer.textureCoord);
+            gl.vertexAttribPointer(programInfo.attribLocations.textureCoord, num, type, normalize, stride, offset);
+            gl.enableVertexAttribArray(programInfo.attribLocations.textureCoord);
         }
 
         // Tell WebGL which indices to use to index the vertices
@@ -177,6 +218,15 @@ let Wall = class {
             programInfo.uniformLocations.modelViewMatrix,
             false,
             modelViewMatrix);
+
+        // Tell WebGL we want to affect texture unit 0
+        gl.activeTexture(gl.TEXTURE0);
+
+        // Bind the texture to texture unit 0
+        gl.bindTexture(gl.TEXTURE_2D, this.texture);
+
+        // Tell the shader we bound the texture to texture unit 0
+        gl.uniform1i(programInfo.uniformLocations.uSampler, 0);
 
         {
             const vertexCount = 6 * 6;
