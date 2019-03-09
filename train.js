@@ -2,7 +2,11 @@ let Train = class {
     constructor(gl, pos) {
         this.pos = pos;
 
-        const url = './Textures/duranto.jpg';
+        var url = '';
+        if(randInt(2) % 2)
+            url = './Textures/wallTexture.jpg';
+        else
+            url = './Textures/duranto.jpg';
         this.texture = loadTexture(gl, url);
 
         // Select the positionBuffer as the one to apply buffer

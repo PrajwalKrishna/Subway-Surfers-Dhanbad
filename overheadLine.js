@@ -118,21 +118,21 @@ let OverheadLine = class {
         this.faceColors = [
             [0.0,  1.0,  1.0,  1.0],    // Front face: cyan
             [1.0,  0.0,  0.0,  1.0],    // Back face: red
-            [0.0,  1.0,  0.0,  1.0],    // Top face: Green
+            [0.0,  0.0,  0.0,  1.0],    // Top face: Green
             [0.0,  0.0,  1.0,  1.0],    // Bottom face: Blue
             [1.0,  1.0,  0.0,  1.0],    // Left face: purple
             [1.0,  1.0,  1.0,  1.0],    // Right face: white
 
             [0.0,  1.0,  1.0,  1.0],    // Front face: cyan
             [1.0,  0.0,  0.0,  1.0],    // Back face: red
-            [0.0,  1.0,  0.0,  1.0],    // Top face: Green
+            [0.0,  0.0,  0.0,  1.0],    // Top face: Green
             [0.0,  0.0,  1.0,  1.0],    // Bottom face: Blue
             [1.0,  1.0,  0.0,  1.0],    // Left face: purple
             [1.0,  1.0,  1.0,  1.0],    // Right face: white
 
             [0.0,  1.0,  1.0,  1.0],    // Front face: cyan
             [1.0,  0.0,  0.0,  1.0],    // Back face: red
-            [0.0,  1.0,  0.0,  1.0],    // Top face: Green
+            [0.0,  0.0,  0.0,  1.0],    // Top face: Green
             [0.0,  0.0,  1.0,  1.0],    // Bottom face: Blue
             [1.0,  1.0,  0.0,  1.0],    // Left face: purple
             [1.0,  1.0,  1.0,  1.0],    // Right face: white
@@ -163,7 +163,7 @@ let OverheadLine = class {
 
         const faceColors_2 = [
             [0.0,  1.0,  1.0,  1.0],    // Front face: cyan
-            [1.0,  0.0,  0.0,  1.0],    // Back face: red
+            [0.0,  0.0,  0.0,  0.8],    // Back face: red
             [0.0,  1.0,  0.0,  1.0],    // Top face: Green
             [0.0,  0.0,  1.0,  1.0],    // Bottom face: Blue
             [1.0,  1.0,  0.0,  1.0],    // Left face: purple

@@ -1,11 +1,7 @@
-let Wall = class {
+let Bushes = class {
     constructor(gl, pos) {
         this.pos = pos;
-        let url = '';
-        if(randInt(2) % 2)
-            url = './Textures/wallTexture.jpg';
-        else
-            url = './Textures/poster_2.jpeg';
+        let url = './Textures/bushes.jpg';
 
         this.texture = loadTexture(gl, url);
 
@@ -16,27 +12,27 @@ let Wall = class {
         this.positionBuffer = gl.createBuffer();
         gl.bindBuffer(gl.ARRAY_BUFFER, this.positionBuffer);
 
-        const width = 1.0;
-        const height = 10.0;
-        const length = 100.0;
+        const width = 5.0;
+        const height = 3.5;
+        const length = 2.5;
 
         // Now create an array of positions for the cube.
          this.positions = [
            // Front face
-           -width/2,     0.0,    length,
-            width/2,     0.0,    length,
+           -width/1.6,     0.0,    length,
+            width/1.6,     0.0,    length,
             width/2,  height,    length,
            -width/2,  height,    length,
            // Back face
             width/2,  height,       0.0,
            -width/2,  height,       0.0,
-           -width/2,     0.0,       0.0,
-            width/2,     0.0,       0.0,
+           -width/1.6,     0.0,       0.0,
+            width/1.6,     0.0,       0.0,
            // Top face
-           -width/2,     0.0,    length,
-            width/2,     0.0,    length,
-            width/2,     0.0,       0.0,
-           -width/2,     0.0,       0.0,
+           -width/1.6,     0.0,    length,
+            width/1.6,     0.0,    length,
+            width/1.6,     0.0,       0.0,
+           -width/1.6,     0.0,       0.0,
            // Bottom face
            -width/2,  height,    length,
             width/2,  height,    length,
@@ -45,13 +41,13 @@ let Wall = class {
            //Left face
            -width/2,  height,       0.0,
            -width/2,  height,    length,
-           -width/2,     0.0,    length,
-           -width/2,     0.0,       0.0,
+           -width/1.6,     0.0,    length,
+           -width/1.6,     0.0,       0.0,
             //Right face
             width/2,  height,       0.0,
             width/2,  height,    length,
-            width/2,     0.0,    length,
-            width/2,     0.0,       0.0,
+            width/1.6,     0.0,    length,
+            width/1.6,     0.0,       0.0,
         ];
 
 

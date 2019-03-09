@@ -1,11 +1,11 @@
-let Wall = class {
+let Barricade = class {
     constructor(gl, pos) {
         this.pos = pos;
         let url = '';
-        if(randInt(2) % 2)
-            url = './Textures/wallTexture.jpg';
-        else
-            url = './Textures/poster_2.jpeg';
+        // if(rand() % 2)
+        //     url = './Textures/wallTexture.jpg';
+        // else
+            url = './Textures/baricade.jpeg';
 
         this.texture = loadTexture(gl, url);
 
@@ -16,9 +16,9 @@ let Wall = class {
         this.positionBuffer = gl.createBuffer();
         gl.bindBuffer(gl.ARRAY_BUFFER, this.positionBuffer);
 
-        const width = 1.0;
-        const height = 10.0;
-        const length = 100.0;
+        const width = 5.0;
+        const height = 3.0;
+        const length = 1.0;
 
         // Now create an array of positions for the cube.
          this.positions = [

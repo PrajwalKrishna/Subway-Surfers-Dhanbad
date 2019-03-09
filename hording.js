@@ -1,11 +1,11 @@
-let Wall = class {
+let Hording = class {
     constructor(gl, pos) {
         this.pos = pos;
         let url = '';
-        if(randInt(2) % 2)
-            url = './Textures/wallTexture.jpg';
-        else
-            url = './Textures/poster_2.jpeg';
+        // if(rand() % 2)
+        //     url = './Textures/wallTexture.jpg';
+        // else
+            url = './Textures/dhanbad.jpg';
 
         this.texture = loadTexture(gl, url);
 
@@ -16,42 +16,107 @@ let Wall = class {
         this.positionBuffer = gl.createBuffer();
         gl.bindBuffer(gl.ARRAY_BUFFER, this.positionBuffer);
 
-        const width = 1.0;
-        const height = 10.0;
-        const length = 100.0;
+        const width = 5.0;
+        const height = 4.0;
+        const length = 1.0;
+        const depth = -4.0;
+        const thickness = 0.1;
 
         // Now create an array of positions for the cube.
          this.positions = [
-           // Front face
-           -width/2,     0.0,    length,
-            width/2,     0.0,    length,
-            width/2,  height,    length,
-           -width/2,  height,    length,
-           // Back face
-            width/2,  height,       0.0,
-           -width/2,  height,       0.0,
-           -width/2,     0.0,       0.0,
-            width/2,     0.0,       0.0,
-           // Top face
-           -width/2,     0.0,    length,
-            width/2,     0.0,    length,
-            width/2,     0.0,       0.0,
-           -width/2,     0.0,       0.0,
-           // Bottom face
-           -width/2,  height,    length,
-            width/2,  height,    length,
-            width/2,  height,       0.0,
-           -width/2,  height,       0.0,
-           //Left face
-           -width/2,  height,       0.0,
-           -width/2,  height,    length,
-           -width/2,     0.0,    length,
-           -width/2,     0.0,       0.0,
-            //Right face
-            width/2,  height,       0.0,
-            width/2,  height,    length,
-            width/2,     0.0,    length,
-            width/2,     0.0,       0.0,
+             // Front face
+             -width/2,     0.0,    length,
+              width/2,     0.0,    length,
+              width/2,  height,    length,
+             -width/2,  height,    length,
+             // Back face
+              width/2,  height,       0.0,
+             -width/2,  height,       0.0,
+             -width/2,     0.0,       0.0,
+              width/2,     0.0,       0.0,
+             // Top face
+             -width/2,     0.0,    length,
+              width/2,     0.0,    length,
+              width/2,     0.0,       0.0,
+             -width/2,     0.0,       0.0,
+             // Bottom face
+             -width/2,  height,    length,
+              width/2,  height,    length,
+              width/2,  height,       0.0,
+             -width/2,  height,       0.0,
+             //Left face
+             -width/2,  height,       0.0,
+             -width/2,  height,    length,
+             -width/2,     0.0,    length,
+             -width/2,     0.0,       0.0,
+              //Right face
+              width/2,  height,       0.0,
+              width/2,  height,    length,
+              width/2,     0.0,    length,
+              width/2,     0.0,       0.0,
+
+            // Front face
+            -thickness/2 - width/2,     0.0,    length,
+             thickness/2 - width/2,     0.0,    length,
+             thickness/2 - width/2,  depth,    length,
+            -thickness/2 - width/2,  depth,    length,
+            // Back face
+             thickness/2 - width/2,  depth,       0.0,
+            -thickness/2 - width/2,  depth,       0.0,
+            -thickness/2 - width/2,     0.0,       0.0,
+             thickness/2 - width/2,     0.0,       0.0,
+            // Top face
+            -thickness/2 - width/2,     0.0,    length,
+             thickness/2 - width/2,     0.0,    length,
+             thickness/2 - width/2,     0.0,       0.0,
+            -thickness/2 - width/2,     0.0,       0.0,
+            // Bottom face
+            -thickness/2 - width/2,  depth,    length,
+             thickness/2 - width/2,  depth,    length,
+             thickness/2 - width/2,  depth,       0.0,
+            -thickness/2 - width/2,  depth,       0.0,
+            //Left face
+            -thickness/2 - width/2,  depth,       0.0,
+            -thickness/2 - width/2,  depth,    length,
+            -thickness/2 - width/2,     0.0,    length,
+            -thickness/2 - width/2,     0.0,       0.0,
+             //Right face
+             thickness/2 - width/2,  depth,       0.0,
+             thickness/2 - width/2,  depth,    length,
+             thickness/2 - width/2,     0.0,    length,
+             thickness/2 - width/2,     0.0,       0.0,
+
+              // Front face
+              -thickness/2 + width/2,     0.0,    length,
+               thickness/2 + width/2,     0.0,    length,
+               thickness/2 + width/2,  depth,    length,
+              -thickness/2 + width/2,  depth,    length,
+              // Back face
+               thickness/2 + width/2,  depth,       0.0,
+              -thickness/2 + width/2,  depth,       0.0,
+              -thickness/2 + width/2,     0.0,       0.0,
+               thickness/2 + width/2,     0.0,       0.0,
+              // Top face
+              -thickness/2 + width/2,     0.0,    length,
+               thickness/2 + width/2,     0.0,    length,
+               thickness/2 + width/2,     0.0,       0.0,
+              -thickness/2 + width/2,     0.0,       0.0,
+              // Bottom face
+              -thickness/2 + width/2,  depth,    length,
+               thickness/2 + width/2,  depth,    length,
+               thickness/2 + width/2,  depth,       0.0,
+              -thickness/2 + width/2,  depth,       0.0,
+              //Left face
+              -thickness/2 + width/2,  depth,       0.0,
+              -thickness/2 + width/2,  depth,    length,
+              -thickness/2 + width/2,     0.0,    length,
+              -thickness/2 + width/2,     0.0,       0.0,
+               //Right face
+               thickness/2 + width/2,  depth,       0.0,
+               thickness/2 + width/2,  depth,    length,
+               thickness/2 + width/2,     0.0,    length,
+               thickness/2 + width/2,     0.0,       0.0,
+
         ];
 
 
@@ -119,6 +184,68 @@ let Wall = class {
            1.0,  0.0,
            1.0,  1.0,
            0.0,  1.0,
+
+           // Front
+           0.0,  0.0,
+           1.0,  0.0,
+           1.0,  1.0,
+           0.0,  1.0,
+           // Back
+           0.0,  0.0,
+           1.0,  0.0,
+           1.0,  1.0,
+           0.0,  1.0,
+           // Top
+           0.0,  0.0,
+           1.0,  0.0,
+           1.0,  1.0,
+           0.0,  1.0,
+           // Bottom
+           0.0,  0.0,
+           1.0,  0.0,
+           1.0,  1.0,
+           0.0,  1.0,
+           // Right
+           0.0,  0.0,
+           1.0,  0.0,
+           1.0,  1.0,
+           0.0,  1.0,
+           // Left
+           0.0,  0.0,
+           1.0,  0.0,
+           1.0,  1.0,
+           0.0,  1.0,
+
+           // Front
+           0.0,  0.0,
+           1.0,  0.0,
+           1.0,  1.0,
+           0.0,  1.0,
+           // Back
+           0.0,  0.0,
+           1.0,  0.0,
+           1.0,  1.0,
+           0.0,  1.0,
+           // Top
+           0.0,  0.0,
+           1.0,  0.0,
+           1.0,  1.0,
+           0.0,  1.0,
+           // Bottom
+           0.0,  0.0,
+           1.0,  0.0,
+           1.0,  1.0,
+           0.0,  1.0,
+           // Right
+           0.0,  0.0,
+           1.0,  0.0,
+           1.0,  1.0,
+           0.0,  1.0,
+           // Left
+           0.0,  0.0,
+           1.0,  0.0,
+           1.0,  1.0,
+           0.0,  1.0,
          ];
 
          gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(textureCoordinates),gl.STATIC_DRAW);
@@ -142,6 +269,20 @@ let Wall = class {
            15, 12, 13,     15, 13, 14,    // bottom
            19, 16, 17,     19, 17, 18,    // left
            23, 20, 21,     23, 21, 22,    // right
+
+           0+24, 1+24, 2+24,  0+24, 2+24, 3+24,    // front
+           7+24, 4+24, 5+24,  7+24, 5+24, 6+24,    // back
+          11+24, 8+24, 9+24, 11+24, 9+24,10+24,    // top
+          15+24,12+24,13+24, 15+24,13+24,14+24,    // bottom
+          19+24,16+24,17+24, 19+24,17+24,18+24,    // left
+          23+24,20+24,21+24, 23+24,21+24,22+24,    // right
+
+          0+48, 1+48, 2+48,  0+48, 2+48, 3+48,    // front
+          7+48, 4+48, 5+48,  7+48, 5+48, 6+48,    // back
+         11+48, 8+48, 9+48, 11+48, 9+48,10+48,    // top
+         15+48,12+48,13+48, 15+48,13+48,14+48,    // bottom
+         19+48,16+48,17+48, 19+48,17+48,18+48,    // left
+         23+48,20+48,21+48, 23+48,21+48,22+48,    // right
         ];
 
         // Now send the element array to GL
@@ -229,7 +370,7 @@ let Wall = class {
         gl.uniform1i(programInfo.uniformLocations.uSampler, 0);
 
         {
-            const vertexCount = 6 * 6;
+            const vertexCount = 36 * 3;
             const type = gl.UNSIGNED_SHORT;
             const offset = 0;
             gl.drawElements(gl.TRIANGLES, vertexCount, type, offset);

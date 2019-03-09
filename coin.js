@@ -1,11 +1,7 @@
-let Wall = class {
+let Coin = class {
     constructor(gl, pos) {
         this.pos = pos;
-        let url = '';
-        if(randInt(2) % 2)
-            url = './Textures/wallTexture.jpg';
-        else
-            url = './Textures/poster_2.jpeg';
+        let url = './Textures/coin.jpg';
 
         this.texture = loadTexture(gl, url);
 
@@ -16,42 +12,42 @@ let Wall = class {
         this.positionBuffer = gl.createBuffer();
         gl.bindBuffer(gl.ARRAY_BUFFER, this.positionBuffer);
 
-        const width = 1.0;
-        const height = 10.0;
-        const length = 100.0;
+        const width = 2.0;
+        const height = 2.0;
+        const length = 2.0;
 
         // Now create an array of positions for the cube.
          this.positions = [
            // Front face
-           -width/2,     0.0,    length,
-            width/2,     0.0,    length,
-            width/2,  height,    length,
-           -width/2,  height,    length,
+           -width/2,  -height/2,    length/2,
+            width/2,  -height/2,    length/2,
+            width/2,   height/2,    length/2,
+           -width/2,   height/2,    length/2,
            // Back face
-            width/2,  height,       0.0,
-           -width/2,  height,       0.0,
-           -width/2,     0.0,       0.0,
-            width/2,     0.0,       0.0,
+            width/2,  height/2,    -length/2,
+           -width/2,  height/2,    -length/2,
+           -width/2, -height/2,    -length/2,
+            width/2, -height/2,    -length/2,
            // Top face
-           -width/2,     0.0,    length,
-            width/2,     0.0,    length,
-            width/2,     0.0,       0.0,
-           -width/2,     0.0,       0.0,
+           -width/2,  -height/2,    length/2,
+            width/2,  -height/2,    length/2,
+            width/2,  -height/2,   -length/2,
+           -width/2,  -height/2,   -length/2,
            // Bottom face
-           -width/2,  height,    length,
-            width/2,  height,    length,
-            width/2,  height,       0.0,
-           -width/2,  height,       0.0,
+           -width/2,  height/2,    length/2,
+            width/2,  height/2,    length/2,
+            width/2,  height/2,   -length/2,
+           -width/2,  height/2,   -length/2,
            //Left face
-           -width/2,  height,       0.0,
-           -width/2,  height,    length,
-           -width/2,     0.0,    length,
-           -width/2,     0.0,       0.0,
+           -width/2,  height/2,   -length/2,
+           -width/2,  height/2,    length/2,
+           -width/2, -height/2,    length/2,
+           -width/2, -height/2,   -length/2,
             //Right face
-            width/2,  height,       0.0,
-            width/2,  height,    length,
-            width/2,     0.0,    length,
-            width/2,     0.0,       0.0,
+            width/2,  height/2,   -length/2,
+            width/2,  height/2,    length/2,
+            width/2, -height/2,    length/2,
+            width/2, -height/2,   -length/2,
         ];
 
 
@@ -168,6 +164,11 @@ let Wall = class {
         mat4.translate(modelViewMatrix,     // destination matrix
                        modelViewMatrix,     // matrix to translate
                        this.pos);  // amount to translate
+       //Write your code to Rotate the cube here//
+       mat4.rotate(modelViewMatrix,modelViewMatrix,
+                  cubeRotation,[1.0, 1.0, 0.0]);
+       mat4.rotate(modelViewMatrix, modelViewMatrix,
+                 cubeRotation,[0.0, 0.0, 1.0]);
 
       // Tell WebGL how to pull out the positions from the position
       // buffer into the vertexPosition attribute
@@ -234,5 +235,6 @@ let Wall = class {
             const offset = 0;
             gl.drawElements(gl.TRIANGLES, vertexCount, type, offset);
         }
+        cubeRotation += deltaTime;
     }
 };
