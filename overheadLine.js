@@ -13,6 +13,7 @@ let OverheadLine = class {
         const height = 0.05;
         const length = 100.0;
         const gauge = 10;
+        this.length = length;
 
         this.positions = [];
         this.faceColors = [];
@@ -222,7 +223,6 @@ let OverheadLine = class {
             ]
 
              this.indices.push(...indices_2);
-             console.log(this.positions.length, this.faceColors.length, this.indices.length)
          }
 
          // Now pass the list of positions into WebGL to build the

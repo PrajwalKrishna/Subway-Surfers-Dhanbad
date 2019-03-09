@@ -12,9 +12,10 @@ let Bushes = class {
         this.positionBuffer = gl.createBuffer();
         gl.bindBuffer(gl.ARRAY_BUFFER, this.positionBuffer);
 
-        const width = 5.0;
-        const height = 3.5;
+        const width = 4.0;
+        const height = 2.5;
         const length = 2.5;
+        this.length = length;
 
         // Now create an array of positions for the cube.
          this.positions = [

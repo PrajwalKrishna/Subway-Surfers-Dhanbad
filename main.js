@@ -182,7 +182,7 @@ function drawScene(gl, programInfo, programInfoTexture, deltaTime) {
     mat4.multiply(viewProjectionMatrix, projectionMatrix, viewMatrix);
 
     // From engine.js
-    tick(deltaTime);
+    tick(gl, deltaTime);
 
     // From engine.js
     draw(gl, viewProjectionMatrix, programInfo, programInfoTexture, deltaTime);
@@ -288,5 +288,5 @@ function isPowerOf2(value) {
 }
 
 function randInt (max) {
-  return Math.floor(Math.random() * (max + 1) );
+  return Math.floor(Math.random() * (max));
 }

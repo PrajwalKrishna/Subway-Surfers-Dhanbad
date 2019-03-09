@@ -15,6 +15,7 @@ let Ground = class {
         const width = 20.0;
         const height = 0.0;
         const length = 100.0;
+        this.length = length;
         // Now create an array of positions for the cube.
          this.positions = [
            // Front face
@@ -202,7 +203,7 @@ let Ground = class {
         gl.useProgram(programInfo.program);
 
         // Set the shader uniforms
-        
+
         // Tell WebGL we want to affect texture unit 0
         gl.activeTexture(gl.TEXTURE0);
 

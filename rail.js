@@ -16,6 +16,7 @@ let Rail = class {
         const height = 0.5;
         const length = 100.0;
         const gauge = 3.5;
+        this.length = length;
 
         this.positions = [];
         this.faceColors = [];
@@ -240,35 +241,17 @@ let Rail = class {
              this.positions.push(...positions);
              this.textureCoordinates.push(...textureCoordinates_2);
              let indices_2 = [
-                 0 + count*24,  1 + count*24,  2 + count * 24,      0 + count*24,  2 + count*24,  3+count*24,    // front
-                 7 + count*24,  4 + count*24,  5 + count * 24,      7 + count*24,  5 + count*24,  6+count*24,    // back
-                11 + count*24,  8 + count*24,  9 + count * 24,     11 + count*24,  9 + count*24, 10+count*24,    // top
-                15 + count*24, 12 + count*24, 13 + count * 24,     15 + count*24, 13 + count*24, 14+count*24,    // bottom
-                19 + count*24, 16 + count*24, 17 + count * 24,     19 + count*24, 17 + count*24, 18+count*24,    // left
-                23 + count*24, 20 + count*24, 21 + count * 24,     23 + count*24, 21 + count*24, 22+count*24,    // right
+                 0+count*24, 1+count*24, 2+count*24,  0+count*24, 2+count*24, 3+count*24,    // front
+                 7+count*24, 4+count*24, 5+count*24,  7+count*24, 5+count*24, 6+count*24,    // back
+                11+count*24, 8+count*24, 9+count*24, 11+count*24, 9+count*24,10+count*24,    // top
+                15+count*24,12+count*24,13+count*24, 15+count*24,13+count*24,14+count*24,    // bottom
+                19+count*24,16+count*24,17+count*24, 19+count*24,17+count*24,18+count*24,    // left
+                23+count*24,20+count*24,21+count*24, 23+count*24,21+count*24,22+count*24,    // right
             ]
-
-             this.indices.push(...indices_2);
-             // console.log(this.positions.length, this.faceColors.length, this.indices.length)
+            this.indices.push(...indices_2);
          }
 
-         // Now pass the list of positions into WebGL to build the
-         // shape. We do this by creating a Float32Array from the
-         // JavaScript array, then use it to fill the current buffer.
-
          gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(this.positions), gl.STATIC_DRAW);
-         // // Convert the array of colors into a table for all the vertices.
-         // var colors = [];
-         //
-         // for (var j = 0; j < this.faceColors.length; ++j) {
-         //     const c = this.faceColors[j];
-         //     // Repeat each color four times for the four vertices of the face
-         //     colors = colors.concat(c, c, c, c);
-         // }
-
-         // const colorBuffer = gl.createBuffer();
-         // gl.bindBuffer(gl.ARRAY_BUFFER, colorBuffer);
-         // gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(colors), gl.STATIC_DRAW);
 
          // Now set up the texture coordinates for the faces.
           const textureCoordBuffer = gl.createBuffer();

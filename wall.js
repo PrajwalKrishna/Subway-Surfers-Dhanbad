@@ -19,6 +19,7 @@ let Wall = class {
         const width = 1.0;
         const height = 10.0;
         const length = 100.0;
+        this.length = length;
 
         // Now create an array of positions for the cube.
          this.positions = [

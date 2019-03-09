@@ -19,6 +19,7 @@ let Barricade = class {
         const width = 5.0;
         const height = 3.0;
         const length = 1.0;
+        this.length = length;
 
         // Now create an array of positions for the cube.
          this.positions = [

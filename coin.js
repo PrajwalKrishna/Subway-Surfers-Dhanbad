@@ -12,9 +12,10 @@ let Coin = class {
         this.positionBuffer = gl.createBuffer();
         gl.bindBuffer(gl.ARRAY_BUFFER, this.positionBuffer);
 
-        const width = 2.0;
-        const height = 2.0;
-        const length = 2.0;
+        const width = 1.0;
+        const height = 1.0;
+        const length = 1.0;
+        this.length = length;
 
         // Now create an array of positions for the cube.
          this.positions = [
@@ -165,10 +166,12 @@ let Coin = class {
                        modelViewMatrix,     // matrix to translate
                        this.pos);  // amount to translate
        //Write your code to Rotate the cube here//
-       mat4.rotate(modelViewMatrix,modelViewMatrix,
-                  cubeRotation,[1.0, 1.0, 0.0]);
+       // mat4.rotate(modelViewMatrix,modelViewMatrix,
+       //            cubeRotation,[1.0, 1.0, 0.0]);
        mat4.rotate(modelViewMatrix, modelViewMatrix,
-                 cubeRotation,[0.0, 0.0, 1.0]);
+                 0.752,[0.0, 0.0, 1.0]);
+       mat4.rotate(modelViewMatrix, modelViewMatrix,
+                 cubeRotation,[1.0, 1.0, 0.0]);
 
       // Tell WebGL how to pull out the positions from the position
       // buffer into the vertexPosition attribute
@@ -235,6 +238,6 @@ let Coin = class {
             const offset = 0;
             gl.drawElements(gl.TRIANGLES, vertexCount, type, offset);
         }
-        cubeRotation += deltaTime;
+        cubeRotation += deltaTime * 10;
     }
 };
