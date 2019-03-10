@@ -18,7 +18,7 @@ let Coin = class {
         this.length = length;
         this.width = width;
         this.height = height;
-    
+
         // Now create an array of positions for the cube.
          this.positions = [
            // Front face
@@ -227,6 +227,9 @@ let Coin = class {
 
         // Tell WebGL we want to affect texture unit 0
         gl.activeTexture(gl.TEXTURE0);
+
+        // Bind the texture to texture unit 0
+        gl.bindTexture(gl.TEXTURE_2D, this.texture);
 
         // Bind the texture to texture unit 0
         gl.bindTexture(gl.TEXTURE_2D, this.texture);

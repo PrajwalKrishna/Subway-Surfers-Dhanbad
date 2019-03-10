@@ -6,6 +6,8 @@ var die = 0;
 var slow = false;
 const OVERHEAD_LEVEL = 8;
 var JETPACK = false;
+var LIGHT = 0;
+var GREYSCALE = false;
 
 function checkFilter(object) {
     return object.pos[2] + object.length > 0;
@@ -115,11 +117,18 @@ function tick(gl, deltaTime){
     miner.tick();
     police.pos[0] = miner.pos[0];
     police.tick();
+
+    LIGHT++;
+    if(LIGHT == 10)
+        LIGHT = 0;
 }
 
-function draw(gl, viewProjectionMatrix, programInfo, programInfoTexture, programInfoFlash, deltaTime){
+function draw(gl, viewProjectionMatrix, programInfo, programInfoTexture, programInfoTextureGreyScale, programInfoFlash, deltaTime){
     function drawTexture(object) {
-        object.drawCube(gl, viewProjectionMatrix, programInfoTexture, deltaTime);
+        if(GREYSCALE)
+            object.drawCube(gl, viewProjectionMatrix, programInfoTextureGreyScale, deltaTime);
+        else
+            object.drawCube(gl, viewProjectionMatrix, programInfoTexture, deltaTime);
     }
     function drawNormal(object) {
         object.drawCube(gl, viewProjectionMatrix, programInfo, deltaTime);
@@ -141,7 +150,10 @@ function draw(gl, viewProjectionMatrix, programInfo, programInfoTexture, program
     boots.forEach(drawTexture);
     jetpacks.forEach(drawTexture);
 
-    walls.forEach(drawFlash);
+    if(LIGHT)
+        walls.forEach(drawTexture);
+    else
+        walls.forEach(drawFlash);
 
     miner.drawCube(gl, viewProjectionMatrix, programInfo, deltaTime);
     police.drawCube(gl, viewProjectionMatrix, programInfo, deltaTime);
@@ -205,6 +217,8 @@ function handleKey(e) {
         case 'ArrowRight':
             miner.move(1);
             break;
+        case 'KeyG':
+            GREYSCALE ^= 1;
     }
 }
 
