@@ -14,8 +14,9 @@ let Miner = class {
         const thickness = 0.6;
         this.length = length;
         this.width = width;
-        this.height = height;
+        this.height = height * 1.25;
         this.up = false;
+        this.timer = 0;
 
         // Now create an array of positions for the cube.
          this.positions = [
@@ -316,6 +317,20 @@ let Miner = class {
                 this.pos[1] -= 0.05;
             }
         }
-        // console.log(miner.pos, this.up);
+        if(JETPACK)
+        {
+            this.timer--;
+            if(this.timer == 0){
+                this.pos[1] = -3.5;
+                JETPACK = false;
+            }
+        }
     }
+
+    jetpack() {
+        this.pos[1] = OVERHEAD_LEVEL;
+        this.timer = 500;
+        JETPACK = true;
+    }
+    boot() {}
 };

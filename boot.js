@@ -1,13 +1,7 @@
-let Wall = class {
+let Boot = class {
     constructor(gl, pos) {
         this.pos = pos;
-        let url = '';
-        if(randInt(3) % 3 == 1)
-            url = './Textures/wallTexture.jpg';
-        else if(randInt(3) % 3 == 1)
-            url = './Textures/ism.jpg';
-        else
-            url = './Textures/poster_2.jpeg';
+        const url = './Textures/boot.jpeg';
 
         this.texture = loadTexture(gl, url);
 
@@ -18,12 +12,13 @@ let Wall = class {
         this.positionBuffer = gl.createBuffer();
         gl.bindBuffer(gl.ARRAY_BUFFER, this.positionBuffer);
 
-        const width = 1.0;
-        const height = 14.0;
-        const length = 100.0;
+        const width = 2.0;
+        const height = 2.0;
+        const length = 1.0;
         this.length = length;
         this.width = width;
         this.height = height;
+
 
         // Now create an array of positions for the cube.
          this.positions = [

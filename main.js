@@ -166,16 +166,19 @@ function drawScene(gl, programInfo, programInfoTexture, deltaTime) {
   // Set the drawing position to the "identity" point, which is
   // the center of the scene.
     var cameraMatrix = mat4.create();
-    mat4.translate(cameraMatrix, cameraMatrix, [0, 0, 0]);
+    if(JETPACK)
+        mat4.translate(cameraMatrix, cameraMatrix, [0, 12, 0]);
+    else
+        mat4.translate(cameraMatrix, cameraMatrix, [0, 4, 0]);
     var cameraPosition = [
       cameraMatrix[12],
-      cameraMatrix[13] + 4,
+      cameraMatrix[13],
       cameraMatrix[14],
     ];
 
     var up = [0, 1, 0];
 
-    mat4.lookAt(cameraMatrix, cameraPosition, [0, 0, 500], up);
+    mat4.lookAt(cameraMatrix, cameraPosition, [0, 8, 500], up);
 
     var viewMatrix = cameraMatrix;//mat4.create();
 

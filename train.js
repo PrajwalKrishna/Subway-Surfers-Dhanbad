@@ -4,7 +4,7 @@ let Train = class {
 
         var url = '';
         if(randInt(2) % 2)
-            url = './Textures/wallTexture.jpg';
+            url = './Textures/wagon.jpeg';
         else
             url = './Textures/duranto.jpg';
         this.texture = loadTexture(gl, url);
@@ -22,7 +22,7 @@ let Train = class {
         this.length = length;
         this.width = width;
         this.height = height;
-    
+
         // Now create an array of positions for the cube.
          this.positions = [
            // Front face

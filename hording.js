@@ -23,7 +23,7 @@ let Hording = class {
         const thickness = 0.1;
         this.length = length;
         this.width = width;
-        this.height = height/2;
+        this.height = height;
 
         // Now create an array of positions for the cube.
          this.positions = [

@@ -4,6 +4,8 @@ var position = 0;
 var score = 0;
 var die = 0;
 var slow = false;
+const OVERHEAD_LEVEL = 8;
+var JETPACK = false;
 
 function checkFilter(object) {
     return object.pos[2] + object.length > 0;
@@ -25,6 +27,8 @@ function init(gl){
     bushes = [];
     hordings = [];
     walls = [];
+    boots = [];
+    jetpacks = [];
 
     grounds.push(new Ground(gl, [0, -5, 0]));
     grounds.push(new Ground(gl, [0, -5, 100]));
@@ -34,16 +38,14 @@ function init(gl){
     rails.push(new Rail(gl, [-6, -5, 100]));
     rails.push(new Rail(gl, [ 0, -5, 100]));
     rails.push(new Rail(gl, [ 6, -5, 100]));
-    overheadLines.push(new OverheadLine(gl,[0,8,  0]));
-    overheadLines.push(new OverheadLine(gl,[0,8,100]));
+    overheadLines.push(new OverheadLine(gl,[0,OVERHEAD_LEVEL,  0]));
+    overheadLines.push(new OverheadLine(gl,[0,OVERHEAD_LEVEL,100]));
     miner = new Miner(gl, [ 0, -3.75, 25]);
     walls.push(new Wall(gl, [-10,-5, 0]));
     walls.push(new Wall(gl, [-10,-5, 100]));
     walls.push(new Wall(gl, [ 10,-5, 0]));
     walls.push(new Wall(gl, [ 10,-5, 100]));
     trains.push(new Train(gl, [6, -5, 40]));
-    coin = new Coin(gl, [-6, -3, 30]);
-    coins.push(coin);
 }
 
 function tick(gl, deltaTime){
@@ -60,11 +62,13 @@ function tick(gl, deltaTime){
         rails.push(new Rail(gl, [-6, -5, 199]));
         walls.push(new Wall(gl, [-10, -5, 199]));
         walls.push(new Wall(gl, [ 10, -5, 199]));
-        overheadLines.push(new OverheadLine(gl, [0, 8, 199]));
+        overheadLines.push(new OverheadLine(gl, [0, OVERHEAD_LEVEL, 199]));
     }
 
+    if(JETPACK && counter % 23 == 2)
+        coins.push(new Coin(gl, [(randInt(3)-1)*6, OVERHEAD_LEVEL, 100+randInt(100)]));
     if(counter % 79 == 2)
-        coins.push(new Coin(gl, [(randInt(3)-1)*6, -4, 100+randInt(100)]));
+        coins.push(new Coin(gl, [(randInt(3)-1)*6, -2, 100+randInt(100)]));
     if(counter % 1211 == 2)
         bushes.push(new Bushes(gl, [(randInt(3)-1)*6, -5, 100+randInt(100)]));
     if(counter % 911 == 2)
@@ -73,6 +77,10 @@ function tick(gl, deltaTime){
         hordings.push(new Hording(gl, [(randInt(3)-1)*6, -1, 100+randInt(100)]));
     if(counter % 379 == 2)
         trains.push(new Train(gl, [(randInt(3)-1)*6, -5, 100+randInt(100)]));
+    if(counter % 1799 == 2)
+        boots.push(new Boot(gl, [(randInt(3)-1)*6, -3, 100+randInt(100)]));
+    if(counter % 1379 == 2)
+        jetpacks.push(new Jetpack(gl, [(randInt(3)-1)*6, -3, 100+randInt(100)]));
 
     checkForCollision();
 
@@ -84,6 +92,8 @@ function tick(gl, deltaTime){
     barricades.forEach(updatePosition);
     bushes.forEach(updatePosition);
     walls.forEach(updatePosition);
+    boots.forEach(updatePosition);
+    jetpacks.forEach(updatePosition);
 
     // Run two times for more speed
     trains.forEach(updatePosition);
@@ -98,6 +108,8 @@ function tick(gl, deltaTime){
     barricades = barricades.filter(checkFilter);
     hordings = hordings.filter(checkFilter);
     trains = trains.filter(checkFilter);
+    boots = boots.filter(checkFilter);
+    jetpacks = jetpacks.filter(checkFilter);
 
     miner.tick();
 }
@@ -122,6 +134,8 @@ function draw(gl, viewProjectionMatrix, programInfo, programInfoTexture, deltaTi
     bushes.forEach(drawTexture);
     walls.forEach(drawTexture);
     trains.forEach(drawTexture);
+    boots.forEach(drawTexture);
+    jetpacks.forEach(drawTexture);
 
     miner.drawCube(gl, viewProjectionMatrix, programInfo, deltaTime);
 }
@@ -145,9 +159,24 @@ function checkForCollision() {
     barricades.forEach(checkerGameOver);
     hordings.forEach(checkerGameOver);
     bushes.forEach(checkerGameOver);
-    // console.log(score);
+
+    jetpacks.forEach(function checker(object){
+        flag = detect_collision(object, miner);
+        if(flag){
+            miner.jetpack();
+            score += 10;
+            object.pos[2]= -100;
+        }
+    })
+    boots.forEach(function checker(object){
+        flag = detect_collision(object, miner);
+        if(flag){
+            miner.boot();
+            score += 10;
+            object.pos[2]= -100;
+        }
+    })
     document.getElementById('score').innerHTML = score;
-    // console.log(die);
 }
 
 window.addEventListener('keydown', handleKey);
@@ -173,9 +202,9 @@ function handleKey(e) {
 }
 
 function detect_collision(a, b) {
-    return (Math.abs(a.pos[0] - b.pos[0]) * 2 < (a.width + b.width)) &&
-           (Math.abs(a.pos[1] - b.pos[1]) * 2 < (a.height + b.height)) &&
-           (Math.abs(a.pos[2] - b.pos[2]) * 2 < (a.length + b.length));
+    return (Math.abs(a.pos[0] - b.pos[0]) * 2 <= (a.width + b.width)) &&
+           (Math.abs(a.pos[1] - b.pos[1]) * 2 <= (a.height + b.height)) &&
+           (Math.abs(a.pos[2] - b.pos[2]) * 2 <= (a.length + b.length));
 }
 
 function randInt (max) {
