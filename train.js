@@ -18,8 +18,11 @@ let Train = class {
 
         const width = 4.0;
         const height = 7.5;
-        const length = 10.0;
-
+        const length = 30.0;
+        this.length = length;
+        this.width = width;
+        this.height = height;
+    
         // Now create an array of positions for the cube.
          this.positions = [
            // Front face

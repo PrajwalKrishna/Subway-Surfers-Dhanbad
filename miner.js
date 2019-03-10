@@ -8,10 +8,14 @@ let Miner = class {
         this.positionBuffer = gl.createBuffer();
         gl.bindBuffer(gl.ARRAY_BUFFER, this.positionBuffer);
 
-        const width = 3.0;
-        const height = 3.5;
-        const length = 2.0;
-        const thickness = 1.0;
+        const width = 2.0;
+        const height = 2.5;
+        const length = 1.0;
+        const thickness = 0.6;
+        this.length = length;
+        this.width = width;
+        this.height = height;
+        this.up = false;
 
         // Now create an array of positions for the cube.
          this.positions = [
@@ -276,5 +280,42 @@ let Miner = class {
             const offset = 0;
             gl.drawElements(gl.TRIANGLES, vertexCount, type, offset);
         }
+    }
+
+    move(direction) {
+        // O for left
+        if(direction == 1)
+            if(this.pos[0] >= 0)
+                this.pos[0] -= 6;
+        // 1 for right
+        if(direction == 0)
+            if(this.pos[0] <= 0)
+                this.pos[0] += 6;
+        // 2 for down
+        if(direction == 2)
+            if(this.pos[1] <= -3.7 && this.pos[1] >= -6.0)
+                this.pos[1] = -6;
+        // 3 for jump
+        if(direction == 3)
+            if(this.pos[1] <= -3.7 && this.pos[1] >= -3.8){
+                this.pos[1] = -3.6;
+                this.up = true;
+            }
+    };
+
+    tick() {
+        if(this.pos[1] < -3.75)
+            this.pos[1] += 0.025;
+        if(this.pos[1] > -3.75 && this.pos[1] <= 0.5){
+            if(this.up){
+                this.pos[1] += 0.05;
+                if(this.pos[1] >= 0)
+                    this.up = false;
+            }
+            else{
+                this.pos[1] -= 0.05;
+            }
+        }
+        // console.log(miner.pos, this.up);
     }
 };

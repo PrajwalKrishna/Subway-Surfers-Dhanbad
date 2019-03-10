@@ -17,44 +17,46 @@ let Hording = class {
         gl.bindBuffer(gl.ARRAY_BUFFER, this.positionBuffer);
 
         const width = 5.0;
-        const height = 4.0;
+        const height = 3.0;
         const length = 1.0;
-        const depth = -4.0;
+        const depth = -2.5;
         const thickness = 0.1;
         this.length = length;
+        this.width = width;
+        this.height = height/2;
 
         // Now create an array of positions for the cube.
          this.positions = [
              // Front face
-             -width/2,     0.0,    length,
-              width/2,     0.0,    length,
-              width/2,  height,    length,
-             -width/2,  height,    length,
+             -width/2, -height/2,    length,
+              width/2, -height/2,    length,
+              width/2,  height/2,    length,
+             -width/2,  height/2,    length,
              // Back face
-              width/2,  height,       0.0,
-             -width/2,  height,       0.0,
-             -width/2,     0.0,       0.0,
-              width/2,     0.0,       0.0,
+              width/2,  height/2,       0.0,
+             -width/2,  height/2,       0.0,
+             -width/2, -height/2,       0.0,
+              width/2, -height/2,       0.0,
              // Top face
-             -width/2,     0.0,    length,
-              width/2,     0.0,    length,
-              width/2,     0.0,       0.0,
-             -width/2,     0.0,       0.0,
+             -width/2, -height/2,    length,
+              width/2, -height/2,    length,
+              width/2, -height/2,       0.0,
+             -width/2, -height/2,       0.0,
              // Bottom face
-             -width/2,  height,    length,
-              width/2,  height,    length,
-              width/2,  height,       0.0,
-             -width/2,  height,       0.0,
+             -width/2,  height/2,    length,
+              width/2,  height/2,    length,
+              width/2,  height/2,       0.0,
+             -width/2,  height/2,       0.0,
              //Left face
-             -width/2,  height,       0.0,
-             -width/2,  height,    length,
-             -width/2,     0.0,    length,
-             -width/2,     0.0,       0.0,
+             -width/2,  height/2,       0.0,
+             -width/2,  height/2,    length,
+             -width/2, -height/2,    length,
+             -width/2, -height/2,       0.0,
               //Right face
-              width/2,  height,       0.0,
-              width/2,  height,    length,
-              width/2,     0.0,    length,
-              width/2,     0.0,       0.0,
+              width/2,  height/2,       0.0,
+              width/2,  height/2,    length,
+              width/2, -height/2,    length,
+              width/2, -height/2,       0.0,
 
             // Front face
             -thickness/2 - width/2,     0.0,    length,

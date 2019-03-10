@@ -1,6 +1,7 @@
 var cubeRotation = 0.0;
 
 main();
+var GREYSCALE = false;
 
 function main() {
   const canvas = document.querySelector('#glcanvas');
@@ -129,7 +130,10 @@ function main() {
 
 // Draw the scene.
 function drawScene(gl, programInfo, programInfoTexture, deltaTime) {
-  gl.clearColor(0.0, 0.5, 0.95, 1.0);  // Clear to black, fully opaque
+  if(GREYSCALE)
+    gl.clearColor(0.2, 0.2, 0.2, 0.8);  // Clear to black, fully opaque
+  else
+    gl.clearColor(0.0, 0.5, 0.95, 1.0);  // Clear to black, fully opaque
   gl.clearDepth(1.0);                 // Clear everything
   gl.enable(gl.DEPTH_TEST);           // Enable depth testing
   gl.depthFunc(gl.LEQUAL);            // Near things obscure far things
@@ -165,13 +169,13 @@ function drawScene(gl, programInfo, programInfoTexture, deltaTime) {
     mat4.translate(cameraMatrix, cameraMatrix, [0, 0, 0]);
     var cameraPosition = [
       cameraMatrix[12],
-      cameraMatrix[13],
+      cameraMatrix[13] + 4,
       cameraMatrix[14],
     ];
 
     var up = [0, 1, 0];
 
-    mat4.lookAt(cameraMatrix, cameraPosition, [0, 0, 5000], up);
+    mat4.lookAt(cameraMatrix, cameraPosition, [0, 0, 500], up);
 
     var viewMatrix = cameraMatrix;//mat4.create();
 
@@ -247,11 +251,17 @@ function loadTexture(gl, url) {
   // use it immediately. When the image has finished downloading
   // we'll update the texture with the contents of the image.
   const level = 0;
-  const internalFormat = gl.RGBA;
+  if(GREYSCALE)
+    internalFormat = gl.LUMINOUS;
+  else
+    internalFormat = gl.RGBA;
   const width = 1;
   const height = 1;
   const border = 0;
-  const srcFormat = gl.RGBA;
+  if(GREYSCALE)
+    srcFormat = gl.LUMINOUS;
+  else
+    srcFormat = gl.RGBA;
   const srcType = gl.UNSIGNED_BYTE;
   const pixel = new Uint8Array([0, 0, 255, 255]);  // opaque blue
   gl.texImage2D(gl.TEXTURE_2D, level, internalFormat,
@@ -285,8 +295,4 @@ function loadTexture(gl, url) {
 
 function isPowerOf2(value) {
   return (value & (value - 1)) == 0;
-}
-
-function randInt (max) {
-  return Math.floor(Math.random() * (max));
 }

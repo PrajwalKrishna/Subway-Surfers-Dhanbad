@@ -17,9 +17,11 @@ let Wall = class {
         gl.bindBuffer(gl.ARRAY_BUFFER, this.positionBuffer);
 
         const width = 1.0;
-        const height = 10.0;
+        const height = 14.0;
         const length = 100.0;
         this.length = length;
+        this.width = width;
+        this.height = height;
 
         // Now create an array of positions for the cube.
          this.positions = [
