@@ -2,10 +2,13 @@ let Wall = class {
     constructor(gl, pos) {
         this.pos = pos;
         let url = '';
-        if(randInt(3) % 3 == 1)
+        let a = randInt(4);
+        if(a == 1)
             url = './Textures/wallTexture.jpg';
-        else if(randInt(3) % 3 == 1)
+        else if(a == 2)
             url = './Textures/ism.jpg';
+        else if(a == 3)
+            url = './Textures/wall.jpg';
         else
             url = './Textures/poster_2.jpeg';
 

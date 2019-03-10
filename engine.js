@@ -2,12 +2,12 @@ var c;
 var speed = 0;
 var position = 0;
 var score = 0;
-var die = 0;
 var slow = false;
 const OVERHEAD_LEVEL = 8;
 var JETPACK = false;
 var LIGHT = 0;
 var GREYSCALE = false;
+var DIFFERNCE = 4.0;
 
 function checkFilter(object) {
     return object.pos[2] + object.length > 0;
@@ -44,6 +44,7 @@ function init(gl){
     overheadLines.push(new OverheadLine(gl,[0,OVERHEAD_LEVEL,100]));
     miner = new Miner(gl, [ 0, -3.75, 30]);
     police = new Police(gl, [ 6, -3.75, 20]);
+    dog = new Dog(gl, [ 6, -5.75, 20]);
     walls.push(new Wall(gl, [-10,-5, 0]));
     walls.push(new Wall(gl, [-10,-5, 100]));
     walls.push(new Wall(gl, [ 10,-5, 0]));
@@ -68,9 +69,9 @@ function tick(gl, deltaTime){
         overheadLines.push(new OverheadLine(gl, [0, OVERHEAD_LEVEL, 199]));
     }
 
-    if(JETPACK && counter % 23 == 2)
+    if(JETPACK && counter % 13 == 2)
         coins.push(new Coin(gl, [(randInt(3)-1)*6, OVERHEAD_LEVEL, 100+randInt(100)]));
-    if(counter % 79 == 2)
+    if(counter % 29 == 2)
         coins.push(new Coin(gl, [(randInt(3)-1)*6, -2, 100+randInt(100)]));
     if(counter % 1211 == 2)
         bushes.push(new Bushes(gl, [(randInt(3)-1)*6, -5, 100+randInt(100)]));
@@ -116,7 +117,16 @@ function tick(gl, deltaTime){
 
     miner.tick();
     police.pos[0] = miner.pos[0];
+    while(dog.pos[0]==police.pos[0])
+        dog.pos[0] = (randInt(3)-1)*6;
+
+    police.pos[2] = miner.pos[2] - DIFFERNCE;
+    dog.pos[2] = (miner.pos[2]+police.pos[2])/2;
+    if(DIFFERNCE < 20)
+        DIFFERNCE += 0.0125;
+
     police.tick();
+    dog.tick();
 
     LIGHT++;
     if(LIGHT == 10)
@@ -155,8 +165,9 @@ function draw(gl, viewProjectionMatrix, programInfo, programInfoTexture, program
     else
         walls.forEach(drawFlash);
 
-    miner.drawCube(gl, viewProjectionMatrix, programInfo, deltaTime);
-    police.drawCube(gl, viewProjectionMatrix, programInfo, deltaTime);
+    miner.drawCube(gl, viewProjectionMatrix, programInfoTexture, deltaTime);
+    police.drawCube(gl, viewProjectionMatrix, programInfoTexture, deltaTime);
+    dog.drawCube(gl, viewProjectionMatrix, programInfoTexture, deltaTime);
 }
 
 function checkForCollision() {
@@ -170,14 +181,23 @@ function checkForCollision() {
     function checkerGameOver(object){
         flag = detect_collision(object, miner);
         if(flag){
-            die += 1;
+            die(score);
             object.pos[2] = -100;
         }
     };
     trains.forEach(checkerGameOver);
     barricades.forEach(checkerGameOver);
     hordings.forEach(checkerGameOver);
-    bushes.forEach(checkerGameOver);
+    bushes.forEach(function checker(object){
+        flag = detect_collision(object, miner);
+        if(flag){
+            if(DIFFERNCE < 10.0)
+                die(score);
+            DIFFERNCE = 4.0;
+            score += 10;
+            object.pos[2]= -100;
+        }
+    });
 
     jetpacks.forEach(function checker(object){
         flag = detect_collision(object, miner);
@@ -230,4 +250,9 @@ function detect_collision(a, b) {
 
 function randInt (max) {
   return Math.floor(Math.random() * (max));
+}
+
+function die(score) {
+    window.alert("Game Over, Final Score = " + score);
+    window.location.reload();
 }

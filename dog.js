@@ -1,7 +1,7 @@
-let Miner = class {
+let Dog = class {
     constructor(gl, pos) {
         this.pos = pos;
-        let url = './Textures/cow.jpg';
+        let url = './Textures/dog.jpg';
 
         this.texture = loadTexture(gl, url);
         // Select the positionBuffer as the one to apply buffer
@@ -12,9 +12,9 @@ let Miner = class {
         gl.bindBuffer(gl.ARRAY_BUFFER, this.positionBuffer);
 
         const width = 2.0;
-        const height = 3.5;
+        const height = 1.0;
         const length = 1.0;
-        const thickness = 0.6;
+        const thickness = 0.3;
         this.length = length;
         this.width = width;
         this.height = height * 1.25;
@@ -302,6 +302,7 @@ let Miner = class {
 
         this.buffer = {
             position: this.positionBuffer,
+            color: colorBuffer,
             textureCoord: textureCoordBuffer,
             indices: indexBuffer,
         }
@@ -356,7 +357,17 @@ let Miner = class {
         gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER, this.buffer.indices);
 
         // Tell WebGL to use our program when drawing
+
         gl.useProgram(programInfo.program);
+
+        // Tell WebGL we want to affect texture unit 0
+        gl.activeTexture(gl.TEXTURE0);
+
+        // Bind the texture to texture unit 0
+        gl.bindTexture(gl.TEXTURE_2D, this.texture);
+
+        // Tell the shader we bound the texture to texture unit 0
+        gl.uniform1i(programInfo.uniformLocations.uSampler, 0);
 
         // Set the shader uniforms
         gl.uniformMatrix4fv(
@@ -368,15 +379,6 @@ let Miner = class {
             false,
             modelViewMatrix);
 
-        // Tell WebGL we want to affect texture unit 0
-        gl.activeTexture(gl.TEXTURE0);
-
-        // Bind the texture to texture unit 0
-        gl.bindTexture(gl.TEXTURE_2D, this.texture);
-
-        // Tell the shader we bound the texture to texture unit 0
-        gl.uniform1i(programInfo.uniformLocations.uSampler, 0);
-
         {
             const vertexCount = 6 * 6 * 3;
             const type = gl.UNSIGNED_SHORT;
@@ -385,48 +387,21 @@ let Miner = class {
         }
     }
 
-    move(direction) {
-        // O for left
-        if(direction == 1)
-            if(this.pos[0] >= 0)
-                this.pos[0] -= 6;
-        // 1 for right
-        if(direction == 0)
-            if(this.pos[0] <= 0)
-                this.pos[0] += 6;
-        // 2 for down
-        if(direction == 2)
-            if(this.pos[1] <= -2.0 && this.pos[1] >= -6.0  && this.pos[1]!=OVERHEAD_LEVEL)
-                this.pos[1] = -6;
-        // 3 for jump
-        if(direction == 3)
-            if(this.pos[1] <= -2.0 && this.pos[1] >= -3.8 && this.pos[1]!=OVERHEAD_LEVEL){
-                this.pos[1] = -3.6;
-                this.up = true;
-                if(this.timer == 0)
-                    this.speed = 0.7;
-                else
-                    this.speed = 1.2;
-            }
-    };
-
     tick() {
         if(this.pos[1] < -3.75)
             this.pos[1] += 0.025;
-
-        if(this.up){
-            this.speed -= 0.035;
-            this.pos[1] += this.speed;
-            this.pos[2] -= this.speed/5;
-            console.log(this.speed, this.pos[1])
-            if(this.pos[1] <= -3.70){
-                this.speed = 0;
-                this.up = false;
-                this.pos[1] = -3.75;
-                this.pos[2] = 30;
+        if(this.pos[1] > -3.75 && this.pos[1] <= 0.5){
+            if(this.up){
+                // this.speed -= 0.05;
+                this.pos[1] += 0.05;
+                if(this.pos[1] >= 0)
+                    this.up = false;
+            }
+            else{
+                this.pos[1] -= 0.05;
             }
         }
-        if(this.timer)
+        if(JETPACK)
         {
             this.timer--;
             if(this.timer == 0){
@@ -434,14 +409,5 @@ let Miner = class {
                 JETPACK = false;
             }
         }
-    }
-
-    jetpack() {
-        this.pos[1] = OVERHEAD_LEVEL;
-        this.timer = 500;
-        JETPACK = true;
-    }
-    boot() {
-        this.timer = 500;
     }
 };

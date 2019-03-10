@@ -13,8 +13,8 @@ let Bushes = class {
         gl.bindBuffer(gl.ARRAY_BUFFER, this.positionBuffer);
 
         const width = 4.0;
-        const height = 2.5;
-        const length = 2.5;
+        const height = 3.5;
+        const length = 1.5;
         this.length = length;
         this.width = width;
         this.height = height;
