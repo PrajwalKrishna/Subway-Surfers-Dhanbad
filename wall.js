@@ -129,6 +129,49 @@ let Wall = class {
          gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(textureCoordinates),gl.STATIC_DRAW);
 
 
+         const normalBuffer = gl.createBuffer();
+         gl.bindBuffer(gl.ARRAY_BUFFER, normalBuffer);
+
+         const vertexNormals = [
+           // Front
+            0.0,  0.0,  1.0,
+            0.0,  0.0,  1.0,
+            0.0,  0.0,  1.0,
+            0.0,  0.0,  1.0,
+
+           // Back
+            0.0,  0.0, -1.0,
+            0.0,  0.0, -1.0,
+            0.0,  0.0, -1.0,
+            0.0,  0.0, -1.0,
+
+           // Top
+            0.0,  1.0,  0.0,
+            0.0,  1.0,  0.0,
+            0.0,  1.0,  0.0,
+            0.0,  1.0,  0.0,
+
+           // Bottom
+            0.0, -1.0,  0.0,
+            0.0, -1.0,  0.0,
+            0.0, -1.0,  0.0,
+            0.0, -1.0,  0.0,
+
+           // Right
+            1.0,  0.0,  0.0,
+            1.0,  0.0,  0.0,
+            1.0,  0.0,  0.0,
+            1.0,  0.0,  0.0,
+
+           // Left
+           -1.0,  0.0,  0.0,
+           -1.0,  0.0,  0.0,
+           -1.0,  0.0,  0.0,
+           -1.0,  0.0,  0.0
+         ];
+
+         gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(vertexNormals),
+                       gl.STATIC_DRAW);
 
         // Build the element array buffer; this specifies the indices
         // into the vertex arrays for each face's vertices.
@@ -156,6 +199,7 @@ let Wall = class {
 
         this.buffer = {
             position: this.positionBuffer,
+            normal: normalBuffer,
             textureCoord: textureCoordBuffer,
             indices: indexBuffer,
         }
@@ -165,6 +209,7 @@ let Wall = class {
     drawCube(gl, projectionMatrix, programInfo, deltaTime) {
         // Set the drawing position to the "identity" point, which is
         // the center of the scene.
+
         const modelViewMatrix = mat4.create();
 
         // Now move the drawing position a bit to where we want to
@@ -173,6 +218,11 @@ let Wall = class {
         mat4.translate(modelViewMatrix,     // destination matrix
                        modelViewMatrix,     // matrix to translate
                        this.pos);  // amount to translate
+
+       // Set the shader uniforms
+       const normalMatrix = mat4.create();
+       mat4.invert(normalMatrix, modelViewMatrix);
+       mat4.transpose(normalMatrix, normalMatrix);
 
       // Tell WebGL how to pull out the positions from the position
       // buffer into the vertexPosition attribute
@@ -206,14 +256,31 @@ let Wall = class {
             gl.enableVertexAttribArray(programInfo.attribLocations.textureCoord);
         }
 
+        // Tell WebGL how to pull out the normals from
+      // the normal buffer into the vertexNormal attribute.
+      {
+        const numComponents = 3;
+        const type = gl.FLOAT;
+        const normalize = false;
+        const stride = 0;
+        const offset = 0;
+        gl.bindBuffer(gl.ARRAY_BUFFER, this.buffer.normal);
+        gl.vertexAttribPointer(
+            programInfo.attribLocations.vertexNormal,
+            numComponents,
+            type,
+            normalize,
+            stride,
+            offset);
+        gl.enableVertexAttribArray(
+            programInfo.attribLocations.vertexNormal);
+      }
+
         // Tell WebGL which indices to use to index the vertices
         gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER, this.buffer.indices);
 
         // Tell WebGL to use our program when drawing
-
         gl.useProgram(programInfo.program);
-
-        // Set the shader uniforms
 
         gl.uniformMatrix4fv(
             programInfo.uniformLocations.projectionMatrix,
@@ -223,6 +290,11 @@ let Wall = class {
             programInfo.uniformLocations.modelViewMatrix,
             false,
             modelViewMatrix);
+
+        gl.uniformMatrix4fv(
+            programInfo.uniformLocations.normalMatrix,
+            false,
+            normalMatrix);
 
         // Tell WebGL we want to affect texture unit 0
         gl.activeTexture(gl.TEXTURE0);

@@ -40,7 +40,8 @@ function init(gl){
     rails.push(new Rail(gl, [ 6, -5, 100]));
     overheadLines.push(new OverheadLine(gl,[0,OVERHEAD_LEVEL,  0]));
     overheadLines.push(new OverheadLine(gl,[0,OVERHEAD_LEVEL,100]));
-    miner = new Miner(gl, [ 0, -3.75, 25]);
+    miner = new Miner(gl, [ 0, -3.75, 30]);
+    police = new Police(gl, [ 6, -3.75, 20]);
     walls.push(new Wall(gl, [-10,-5, 0]));
     walls.push(new Wall(gl, [-10,-5, 100]));
     walls.push(new Wall(gl, [ 10,-5, 0]));
@@ -112,16 +113,20 @@ function tick(gl, deltaTime){
     jetpacks = jetpacks.filter(checkFilter);
 
     miner.tick();
+    police.pos[0] = miner.pos[0];
+    police.tick();
 }
 
-function draw(gl, viewProjectionMatrix, programInfo, programInfoTexture, deltaTime){
+function draw(gl, viewProjectionMatrix, programInfo, programInfoTexture, programInfoFlash, deltaTime){
     function drawTexture(object) {
         object.drawCube(gl, viewProjectionMatrix, programInfoTexture, deltaTime);
     }
     function drawNormal(object) {
         object.drawCube(gl, viewProjectionMatrix, programInfo, deltaTime);
     }
-
+    function drawFlash(object) {
+        object.drawCube(gl, viewProjectionMatrix, programInfoFlash, deltaTime);
+    }
 
     // Final function which renders everything
     grounds.forEach(drawTexture);
@@ -132,12 +137,14 @@ function draw(gl, viewProjectionMatrix, programInfo, programInfoTexture, deltaTi
     hordings.forEach(drawTexture);
     barricades.forEach(drawTexture);
     bushes.forEach(drawTexture);
-    walls.forEach(drawTexture);
     trains.forEach(drawTexture);
     boots.forEach(drawTexture);
     jetpacks.forEach(drawTexture);
 
+    walls.forEach(drawFlash);
+
     miner.drawCube(gl, viewProjectionMatrix, programInfo, deltaTime);
+    police.drawCube(gl, viewProjectionMatrix, programInfo, deltaTime);
 }
 
 function checkForCollision() {
